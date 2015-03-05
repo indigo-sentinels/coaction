@@ -28,5 +28,5 @@ app.factory('usersService', ['$http', function($http) {
     deleteUser: function(user) {
       return processAjaxPromise($http.delete('/api/users', user));
     }
-  }
+  };
 }]);

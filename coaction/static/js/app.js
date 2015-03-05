@@ -30,6 +30,7 @@ app.config(['$routeProvider', function($routeProvider) {
     self.task = Task();
 
     // $window.location.href= "#/shares"; TODO
+  };
 }]);
 
 app.config(['$routeProvider', function($routeProvider) {
@@ -74,7 +75,7 @@ app.factory('Task', function() {
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'tasks/tasks.html',
+    templateUrl: '/static/tasks/tasks.html',
     controller: 'TasksCtrl',
     controllerAs: 'vm',
     resolve: {
@@ -84,7 +85,8 @@ app.config(['$routeProvider', function($routeProvider) {
     }
   };
 
-  $routeProvider.when('/tasks/', routeDefinition);
+  $routeProvider.when('/', routeDefinition);
+  $routeProvider.when('/tasks', routeDefinition);
 }])
 .controller('TasksCtrl', ['tasks', function (tasks) {
   var self = this;
@@ -121,7 +123,7 @@ app.factory('tasksService', ['$http', function($http) {
     deleteTask: function(task) {
       return processAjaxPromise($http.delete('/api/tasks', task));
     }
-  }
+  };
 }]);
 
 app.config(['$routeProvider', function($routeProvider) {
@@ -143,6 +145,7 @@ app.config(['$routeProvider', function($routeProvider) {
     self.user = User();
 
     // $window.location.href= "#/shares"; TODO
+  };
 }]);
 
 app.config(['$routeProvider', function($routeProvider) {
@@ -209,7 +212,7 @@ app.factory('usersService', ['$http', function($http) {
     deleteUser: function(user) {
       return processAjaxPromise($http.delete('/api/users', user));
     }
-  }
+  };
 }]);
 
 app.controller('Error404Ctrl', ['$location', function ($location) {

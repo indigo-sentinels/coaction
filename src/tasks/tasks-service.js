@@ -28,5 +28,5 @@ app.factory('tasksService', ['$http', function($http) {
     deleteTask: function(task) {
       return processAjaxPromise($http.delete('/api/tasks', task));
     }
-  }
+  };
 }]);

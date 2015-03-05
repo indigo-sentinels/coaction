@@ -17,4 +17,5 @@ app.config(['$routeProvider', function($routeProvider) {
     self.user = User();
 
     // $window.location.href= "#/shares"; TODO
+  };
 }]);
