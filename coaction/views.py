@@ -10,7 +10,7 @@ coaction = Blueprint("coaction", __name__, static_folder="./static")
 def index():
     return coaction.send_static_file("index.html")
 
-class TaskList(APIView):
+class TaskListView(APIView):
     def get(self):
         return {"tasks": [{
             "taskId": 1,
@@ -38,4 +38,21 @@ class TaskList(APIView):
             }]
         }
 
-coaction.add_url_rule('/tasks', view_func=TaskList.as_view('tasks'))
+class TaskView(APIView):
+    def get(self, id):
+        return {
+            "taskId": id,
+            "title": "Pick up kid from daycare",
+            "userId": 1,
+            "timestamp": "2015-03-05",
+            "assignedIds":[1, 2, 3],
+            "status":"started",
+            "description":"kid stabbed another kid with safety scissors",
+            "comments":[{"commentId": 1, "userId": 2, "text": "OMG! little brady is crazy!"}],
+            "dueDate": "2015-03-06",
+            "todos":[{"todoId": 1, "userId": 1, "text": "fill up car with gas"}]
+        }
+
+
+coaction.add_url_rule('/tasks', view_func=TaskListView.as_view('tasks'))
+coaction.add_url_rule('/tasks/<int:id>', view_func=TaskView.as_view('task'))
