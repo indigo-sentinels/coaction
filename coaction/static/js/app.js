@@ -11,27 +11,6 @@ app.config(['$routeProvider', function ($routeProvider) {
   });
 }]);
 
-
-app.factory('Task', function() {
-  return function (spec) {
-    spec: spec || {};
-    return {
-      title: spec.title || '',
-      userId: spec.userId || '',
-      taskId: spec.taskId || '',
-      timestamp: spec.timestamp || '',
-      assignedIds: spec.assignedIds || [],
-      status: spec.status || '',
-      description: spec.description || '',
-      comments: spec.comments || [],
-      dueDate: spec.dueDate || '',
-      todos: spec.todos || []
-    };
-  };
-});
-
-
-
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
     templateUrl: 'users/user.html',
@@ -65,6 +44,47 @@ app.factory('User', function() {
     };
   };
 });
+
+
+app.config(['$routeProvider', function($routeProvider) {
+  var routeDefinition = {
+    templateUrl: 'tasks/task.html',
+    controller: 'TaskCtrl',
+    controllerAs: 'vm',
+    resolve: {
+      task: ['tasksService', '$route', function (tasksService, $route) {
+        var routeParams = $route.current.params;
+        var id = routeParams.id;
+        return tasksService.viewTask(id);
+      }]
+    }
+  };
+
+  $routeProvider.when('/tasks/:id', routeDefinition);
+}])
+.controller('TaskCtrl', ['task', function (task) {
+  var self = this;
+  self.task = task;
+}]);
+
+app.factory('Task', function() {
+  return function (spec) {
+    spec: spec || {};
+    return {
+      title: spec.title || '',
+      userId: spec.userId || '',
+      taskId: spec.taskId || '',
+      timestamp: spec.timestamp || '',
+      assignedIds: spec.assignedIds || [],
+      status: spec.status || '',
+      description: spec.description || '',
+      comments: spec.comments || [],
+      dueDate: spec.dueDate || '',
+      todos: spec.todos || []
+    };
+  };
+});
+
 
 
 app.controller('Error404Ctrl', ['$location', function ($location) {
