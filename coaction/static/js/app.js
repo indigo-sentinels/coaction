@@ -50,6 +50,28 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
   this.message = 'Could not find: ' + $location.url();
 }]);
 
+app.factory('Comment', function() {
+  return function (spec) {
+    spec: spec || {};
+    return {
+      commentId: spec.commentId || '',
+      taskId: spec.taskId || '',
+      userId: spec.userId || '',
+      text: spec.text || ''
+    };
+  };
+});
 
+app.factory('Todo', function() {
+  return function (spec) {
+    spec: spec || {};
+    return {
+      todoId: spec.todoId || '',
+      taskId: spec.taskId || '',
+      userId: spec.userId || '',
+      text: spec.text || ''
+    };
+  };
+});
 
 //# sourceMappingURL=app.js.map
