@@ -13,41 +13,6 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'users/user.html',
-    controller: 'UserCtrl',
-    controllerAs: 'vm',
-    resolve: {
-      user: ['usersService', '$route', function (usersService, $route) {
-        var routeParams = $route.current.params;
-        var id = routeParams.id;
-        console.log(id);
-        return usersService.viewUser(id);
-      }]
-    }
-  };
-
-  $routeProvider.when('/users/:id', routeDefinition);
-}])
-.controller('UserCtrl', ['user', function (user) {
-  var self = this;
-  self.user = user;
-}]);
-
-app.factory('User', function() {
-  return function (spec) {
-    spec: spec || {};
-    return {
-      userId: spec.userId || '',
-      username: spec.username || '',
-      password: spec.password || '',
-      email: spec.email || ''
-    };
-  };
-});
-
-
-app.config(['$routeProvider', function($routeProvider) {
-  var routeDefinition = {
     templateUrl: 'tasks/task.html',
     controller: 'TaskCtrl',
     controllerAs: 'vm',
@@ -86,6 +51,65 @@ app.factory('Task', function() {
 });
 
 
+
+app.config(['$routeProvider', function($routeProvider) {
+  var routeDefinition = {
+    templateUrl: 'users/user.html',
+    controller: 'UserCtrl',
+    controllerAs: 'vm',
+    resolve: {
+      user: ['usersService', '$route', function (usersService, $route) {
+        var routeParams = $route.current.params;
+        var id = routeParams.id;
+        console.log(id);
+        return usersService.viewUser(id);
+      }]
+    }
+  };
+
+  $routeProvider.when('/users/:id', routeDefinition);
+}])
+.controller('UserCtrl', ['user', function (user) {
+  var self = this;
+  self.user = user;
+}]);
+
+app.factory('User', function() {
+  return function (spec) {
+    spec: spec || {};
+    return {
+      userId: spec.userId || '',
+      username: spec.username || '',
+      password: spec.password || '',
+      email: spec.email || ''
+    };
+  };
+});
+
+app.factory('usersService', ['$http', function($http) {
+  function get(url) {
+    return processAjaxPromise($http.get(url));
+  }
+
+  function processAjaxPromise(p) {
+    return p.then(function (result) {
+      return result.data;
+    })
+    .catch(function (error) {
+      $log.log(error);
+    });
+  }
+
+  return {
+    list: function () {
+      return get('/api/users');
+    },
+
+    viewUser: function (id) {
+      return get('/api/users' + id);
+    }
+  }
+}]);
 
 app.controller('Error404Ctrl', ['$location', function ($location) {
   this.message = 'Could not find: ' + $location.url();
