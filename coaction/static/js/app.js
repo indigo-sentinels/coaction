@@ -16,10 +16,23 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 
 
+app.factory('User', function() {
+  return function (spec) {
+    spec: spec || {};
+    return {
+      userId: spec.userId || '',
+      username: spec.username || '',
+      password: spec.password || '',
+      email: spec.email || ''
+    };
+  };
+});
 
 
 app.controller('Error404Ctrl', ['$location', function ($location) {
   this.message = 'Could not find: ' + $location.url();
 }]);
+
+
 
 //# sourceMappingURL=app.js.map
