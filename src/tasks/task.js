@@ -11,7 +11,8 @@ app.factory('Task', function() {
       description: spec.description || '',
       comments: spec.comments || [],
       dueDate: spec.dueDate || '',
-      todos: spec.todos || []
+      todos: spec.todos || [],
+      orderId: spec.orderId || ''
     };
   };
 });

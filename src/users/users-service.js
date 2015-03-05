@@ -19,6 +19,14 @@ app.factory('usersService', ['$http', function($http) {
 
     viewUser: function (id) {
       return get('/api/users/' + id);
+    },
+
+    addUser: function(user) {
+      return processAjaxPromise($http.post('/api/users', user));
+    },
+
+    deleteUser: function(user) {
+      return processAjaxPromise($http.delete('/api/users', user));
     }
   }
 }]);

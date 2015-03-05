@@ -66,11 +66,30 @@ app.factory('Task', function() {
       description: spec.description || '',
       comments: spec.comments || [],
       dueDate: spec.dueDate || '',
-      todos: spec.todos || []
+      todos: spec.todos || [],
+      orderId: spec.orderId || ''
     };
   };
 });
 
+app.config(['$routeProvider', function($routeProvider) {
+  var routeDefinition = {
+    templateUrl: 'tasks/tasks.html',
+    controller: 'TasksCtrl',
+    controllerAs: 'vm',
+    resolve: {
+      tasks: ['tasksService', function (tasksService) {
+        return tasksService.list();
+      }]
+    }
+  };
+
+  $routeProvider.when('/tasks/', routeDefinition);
+}])
+.controller('TasksCtrl', ['tasks', function (tasks) {
+  var self = this;
+  self.tasks = tasks;
+}]);
 
 app.factory('tasksService', ['$http', function($http) {
   function get(url) {
@@ -96,10 +115,34 @@ app.factory('tasksService', ['$http', function($http) {
     },
 
     addTask: function(task) {
-      return processAjaxPromise($http.post('/api/task'));
+      return processAjaxPromise($http.post('/api/tasks', task));
+    },
 
+    deleteTask: function(task) {
+      return processAjaxPromise($http.delete('/api/tasks', task));
     }
   }
+}]);
+
+app.config(['$routeProvider', function($routeProvider) {
+  var routeDefinition = {
+    templateUrl: 'users/new-user.html',
+    controller: 'NewUserCtrl',
+    controllerAs: 'vm'
+  };
+
+  $routeProvider.when('/users/new', routeDefinition);
+}])
+.controller('NewUserCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
+  var self = this;
+  self.user = User();
+
+  self.addUser = function() {
+    usersService.addUser(self.user);
+
+    self.user = User();
+
+    // $window.location.href= "#/shares"; TODO
 }]);
 
 app.config(['$routeProvider', function($routeProvider) {
@@ -157,6 +200,14 @@ app.factory('usersService', ['$http', function($http) {
 
     viewUser: function (id) {
       return get('/api/users/' + id);
+    },
+
+    addUser: function(user) {
+      return processAjaxPromise($http.post('/api/users', user));
+    },
+
+    deleteUser: function(user) {
+      return processAjaxPromise($http.delete('/api/users', user));
     }
   }
 }]);
