@@ -1,0 +1,6 @@
+<div ng-repeat="task in vm.tasks | orderBy: 'timestamp': reverse=true">
+  <h1>{{task.title}}</h1>
+  <p>{{task.description}}</p>
+  <p>{{task.status}}</p>
+  <p>{{task.dueDate}}</p>
+</div>
