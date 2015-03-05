@@ -1,6 +1,6 @@
 app.factory('Task', function() {
   return function (spec) {
-    spec: spec || {};
+    spec = spec || {};
     return {
       title: spec.title || '',
       userId: spec.userId || '',

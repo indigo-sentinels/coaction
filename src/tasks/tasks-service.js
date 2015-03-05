@@ -5,7 +5,7 @@ app.factory('tasksService', ['$http', function($http) {
 
   function processAjaxPromise(p) {
     return p.then(function (result) {
-      return result.data;
+      return result.data.tasks;
     })
     .catch(function (error) {
       $log.log(error);

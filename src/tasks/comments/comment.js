@@ -1,6 +1,6 @@
 app.factory('Comment', function() {
   return function (spec) {
-    spec: spec || {};
+    spec = spec || {};
     return {
       commentId: spec.commentId || '',
       taskId: spec.taskId || '',

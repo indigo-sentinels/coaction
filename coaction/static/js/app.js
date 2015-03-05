@@ -56,7 +56,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
 app.factory('Task', function() {
   return function (spec) {
-    spec: spec || {};
+    spec = spec || {};
     return {
       title: spec.title || '',
       userId: spec.userId || '',
@@ -100,7 +100,7 @@ app.factory('tasksService', ['$http', function($http) {
 
   function processAjaxPromise(p) {
     return p.then(function (result) {
-      return result.data;
+      return result.data.tasks;
     })
     .catch(function (error) {
       $log.log(error);
@@ -172,7 +172,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
 app.factory('User', function() {
   return function (spec) {
-    spec: spec || {};
+    spec = spec || {};
     return {
       userId: spec.userId || '',
       username: spec.username || '',
@@ -221,7 +221,7 @@ app.controller('Error404Ctrl', ['$location', function ($location) {
 
 app.factory('Comment', function() {
   return function (spec) {
-    spec: spec || {};
+    spec = spec || {};
     return {
       commentId: spec.commentId || '',
       taskId: spec.taskId || '',
@@ -233,7 +233,7 @@ app.factory('Comment', function() {
 
 app.factory('Todo', function() {
   return function (spec) {
-    spec: spec || {};
+    spec = spec || {};
     return {
       todoId: spec.todoId || '',
       taskId: spec.taskId || '',
