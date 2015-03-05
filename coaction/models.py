@@ -1,4 +1,4 @@
-from .extensions import db
+from .extensions import db, login_manager
 from flask.ext.login import UserMixin
 from sqlalchemy import func
 
@@ -34,7 +34,7 @@ class Task(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime, nullable=False)
     ## Assigned IDs is going to need attention
-    assigned_ids = db.column(db.Integer)
+    assigned_ids = db.Column(db.Integer)
     status = db.Column(db.String(255), nullable=False, default="New")
     description = db.Column(db.String(255), nullable=False)
     due_date = db.Column(db.DateTime)
