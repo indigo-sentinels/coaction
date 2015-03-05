@@ -7,9 +7,7 @@ from .models import Task
 from .forms import TaskForm
 
 
-
 coaction = Blueprint("coaction", __name__, static_folder="./static")
-
 
 @coaction.route("/")
 def index():
