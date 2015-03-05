@@ -1,10 +1,11 @@
 import json
 from flask.ext.login import login_user, current_user
-from flask import Blueprint, flash, jsonify
+from flask import Blueprint, flash, jsonify, request
 from .api_helpers import returns_json, APIView, api_form
 from .extensions import db
 from .models import Task
 from .forms import TaskForm
+from datetime import date
 
 
 
@@ -21,6 +22,7 @@ class TaskListView(APIView):
             "taskId": 1,
             "title": "Pick up kid from daycare",
             "userId": 1,
+            "orderId":1,
             "timestamp": "2015-03-05",
             "assignedIds":[1, 2, 3],
             "status":"started",
@@ -33,6 +35,7 @@ class TaskListView(APIView):
             "taskId": 2,
             "title": "Feed child",
             "userId": 1,
+            "orderId": 2,
             "timestamp": "2015-03-05",
             "assignedIds":[3],
             "status":"New",
@@ -49,9 +52,13 @@ class TaskListView(APIView):
         form = TaskForm(data=data, formdata=None)
         if form.validate():
             task = Task(**form.data)
+            task.user_id = 1
+            task.timestamp = date.today()
             db.session.add(task)
             db.session.commit()
-            return jsonify(task)
+            return {"success":"yay"}
+        else:
+            return form.errors
 
 class TaskView(APIView):
     def get(self, id):
@@ -59,6 +66,7 @@ class TaskView(APIView):
             "taskId": id,
             "title": "Feed child",
             "userId": 1,
+            "orderId": 1,
             "timestamp": "2015-03-05",
             "assignedIds":[3],
             "status":"New",
@@ -78,6 +86,6 @@ class UserView(APIView):
         }
 
 
-coaction.add_url_rule('/tasks', view_func=TaskListView.as_view('tasks'))
-coaction.add_url_rule('/tasks/<int:id>', view_func=TaskView.as_view('task'))
-coaction.add_url_rule('/users/<int:id>', view_func=UserView.as_view('user'))
+coaction.add_url_rule('/tasks/', view_func=TaskListView.as_view('tasks'))
+coaction.add_url_rule('/tasks/<int:id>/', view_func=TaskView.as_view('task'))
+coaction.add_url_rule('/users/<int:id>/', view_func=UserView.as_view('user'))

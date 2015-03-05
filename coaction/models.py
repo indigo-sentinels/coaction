@@ -1,5 +1,6 @@
 from .extensions import db, login_manager
 from flask.ext.login import UserMixin
+from marshmallow import Schema, fields, pprint
 from sqlalchemy import func
 
 
@@ -11,7 +12,11 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
-    encrypted_password = db.Column(db.String(60))
+    encryptedPassword = db.Column(db.String(60))
+
+    class UserSchema(Schema):
+    name = fields.String()
+    email = fields.Email()
 
     def get_password(self):
         return getattr(self, "_password", None)
@@ -29,30 +34,31 @@ class User(db.Model, UserMixin):
         return "<User {}>".format(self.email)
 
 class Task(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    taskid = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(255), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime, nullable=False)
     ## Assigned IDs is going to need attention
-    assigned_ids = db.Column(db.Integer)
+    assignedIds = db.Column(db.Integer)
     status = db.Column(db.String(255), nullable=False, default="New")
     description = db.Column(db.String(255), nullable=False)
-    due_date = db.Column(db.DateTime)
+    duedate = db.Column(db.DateTime)
+    orderId = db.Column(db.Integer)
     user = db.relationship('User',
         backref=db.backref('tasks', lazy='dynamic'))
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    taskId = db.Column(db.Integer, db.ForeignKey('task.id'))
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     text = db.Column(db.String(255), nullable=False)
     task = db.relationship('Task',
         backref=db.backref('comments', lazy='dynamic'))
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    taskId = db.Column(db.Integer, db.ForeignKey('task.id'))
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     text = db.Column(db.String(255), nullable=False)
     task = db.relationship('Task',
         backref=db.backref('todos', lazy='dynamic'))
