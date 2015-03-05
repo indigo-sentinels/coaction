@@ -1,5 +1,10 @@
+import json
+from flask.ext.login import login_user, current_user
 from flask import Blueprint, flash, jsonify
 from .api_helpers import returns_json, APIView, api_form
+from .extensions import db
+from .models import Task
+from .forms import TaskForm
 
 
 
@@ -38,6 +43,16 @@ class TaskListView(APIView):
             }]
         }
 
+    def post(self):
+        body = request.get_data(as_text='true')
+        data = json.loads(body)
+        form = TaskForm(data=data, formdata=None)
+        if form.validate():
+            task = Task(**form.data)
+            db.session.add(task)
+            db.session.commit()
+            return jsonify(task)
+
 class TaskView(APIView):
     def get(self, id):
         return {
@@ -53,8 +68,16 @@ class TaskView(APIView):
             "todos":[{"taskId": 2, "todoId": 3, "userId": 1, "text": "Make pb and j"}]
             }
 
-    # def post(self, id):
+class UserView(APIView):
+    def get(self, id):
+        return {
+            "user_id": 1,
+            "username": "JohnPM",
+            "encrypted_password": "jkalfsd932ut0invlafsdga",
+            "email": "J@J.J"
+        }
 
 
 coaction.add_url_rule('/tasks', view_func=TaskListView.as_view('tasks'))
 coaction.add_url_rule('/tasks/<int:id>', view_func=TaskView.as_view('task'))
+coaction.add_url_rule('/users/<int:id>', view_func=UserView.as_view('user'))
