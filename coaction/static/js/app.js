@@ -13,6 +13,27 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
+    templateUrl: 'tasks/new-task.html',
+    controller: 'NewTaskCtrl',
+    controllerAs: 'vm'
+  };
+
+  $routeProvider.when('/tasks/new', routeDefinition);
+}])
+.controller('NewTaskCtrl', ['tasksService', 'Task', '$window', function (tasksService, Task, $window) {
+  var self = this;
+  self.task = Task();
+
+  self.addTask = function() {
+    tasksService.addTask(self.task);
+
+    self.task = Task();
+
+    // $window.location.href= "#/shares"; TODO
+}]);
+
+app.config(['$routeProvider', function($routeProvider) {
+  var routeDefinition = {
     templateUrl: 'tasks/task.html',
     controller: 'TaskCtrl',
     controllerAs: 'vm',
@@ -51,6 +72,35 @@ app.factory('Task', function() {
 });
 
 
+app.factory('tasksService', ['$http', function($http) {
+  function get(url) {
+    return processAjaxPromise($http.get(url));
+  }
+
+  function processAjaxPromise(p) {
+    return p.then(function (result) {
+      return result.data;
+    })
+    .catch(function (error) {
+      $log.log(error);
+    });
+  }
+
+  return {
+    list: function () {
+      return get('/api/tasks');
+    },
+
+    viewTask: function (id) {
+      return get('/api/tasks/' + id);
+    },
+
+    addTask: function(task) {
+      return processAjaxPromise($http.post('/api/task'));
+
+    }
+  }
+}]);
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
@@ -106,7 +156,7 @@ app.factory('usersService', ['$http', function($http) {
     },
 
     viewUser: function (id) {
-      return get('/api/users' + id);
+      return get('/api/users/' + id);
     }
   }
 }]);

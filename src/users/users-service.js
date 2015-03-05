@@ -18,7 +18,7 @@ app.factory('usersService', ['$http', function($http) {
     },
 
     viewUser: function (id) {
-      return get('/api/users' + id);
+      return get('/api/users/' + id);
     }
   }
 }]);
