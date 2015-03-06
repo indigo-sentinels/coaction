@@ -4,11 +4,9 @@ from wtforms.fields.html5 import IntegerField, DateField
 from wtforms.validators import DataRequired, AnyOf
 
 class TaskForm(Form):
-    title = StringField('title')
+    title = StringField('title', validators=[DataRequired()])
     status = StringField('status', default="New")
-    # description = StringField('Description')
-    # due_date = DateField('Date')
-    # assigned_ids = IntegerField("assigned_ids")
-    # order_id = IntegerField('orderId')
-
-
+    description = StringField('Description')
+    duedate = DateField('Date')
+    assignedIds = IntegerField("assignedIds")
+    orderId = IntegerField('orderId')

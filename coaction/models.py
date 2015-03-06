@@ -2,11 +2,13 @@ from .extensions import db, login_manager
 from flask.ext.login import UserMixin
 from marshmallow import Schema, fields
 from sqlalchemy import func
+from datetime import datetime
 
 
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(id)
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -30,8 +32,9 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return "<User {}>".format(self.email)
 
+
 # class Task(db.Model):
-#     taskId = db.Column(db.Integer, primary_key=True, autoincrement=True)
+# taskId = db.Column(db.Integer, primary_key=True, autoincrement=True)
 #     title = db.Column(db.String(255))
 #     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
 #     timestamp = db.Column(db.DateTime)
@@ -48,17 +51,36 @@ class Task(db.Model):
     taskId = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(255))
     status = db.Column(db.String(255), default="New")
-    # userId = db.Column(db.Integer, db.ForeignKey('user.id'))
-    # timestamp = db.Column(db.DateTime)
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
+    timestamp = db.Column(db.DateTime)
+    duedate = db.Column(db.DateTime)
+    description = db.Column(db.String(255))
+    orderId = db.Column(db.Integer)
+    assignedIds = db.Column(db.Integer)
+    user = db.relationship('User',
+                           backref=db.backref('tasks', lazy='dynamic'))
+
+    def check_date(self, date):
+        if date == None:
+            return None
+        else:
+            return datetime.strptime(date, "%Y/%m/%d")
 
 
-    def __init__(self, title, status):
+    def __init__(self, title, status, duedate, description, assignedIds, orderId):
         self.title = title
         self.status = status
+        self.duedate = self.check_date(duedate)
+        self.description = description
+        self.assignedIds = assignedIds
+        self.orderId = orderId
+
+
 
 class TaskSchema(Schema):
     class Meta:
-        fields = ('title', 'status')
+        fields = ('title', 'status', 'timestamp', 'duedate', 'description', 'assignedIds', 'orderId')
+
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -66,7 +88,8 @@ class Comment(db.Model):
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     text = db.Column(db.String(255), nullable=False)
     task = db.relationship('Task',
-        backref=db.backref('comments', lazy='dynamic'))
+                           backref=db.backref('comments', lazy='dynamic'))
+
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -74,4 +97,4 @@ class Todo(db.Model):
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     text = db.Column(db.String(255), nullable=False)
     task = db.relationship('Task',
-        backref=db.backref('todos', lazy='dynamic'))
+                           backref=db.backref('todos', lazy='dynamic'))
