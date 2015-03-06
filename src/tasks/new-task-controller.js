@@ -1,6 +1,6 @@
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'tasks/new-task.html',
+    templateUrl: '/static/tasks/new-task.html',
     controller: 'NewTaskCtrl',
     controllerAs: 'vm'
   };
