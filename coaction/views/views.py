@@ -1,10 +1,10 @@
 import json
 from flask.ext.login import login_user, current_user
 from flask import Blueprint, flash, jsonify, request
-from .api_helpers import returns_json, APIView, api_form
-from .extensions import db
-from .models import TaskSchema, Task
-from .forms import TaskForm
+from coaction.api_helpers import returns_json, APIView, api_form
+from coaction.extensions import db
+from coaction.models import TaskSchema, Task
+from coaction.forms import TaskForm
 from flask.ext.marshmallow import Marshmallow
 from datetime import date
 from pprint import pprint
