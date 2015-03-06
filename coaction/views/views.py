@@ -5,7 +5,7 @@ from coaction.api_helpers import returns_json, APIView, api_form
 from coaction.extensions import db
 from coaction.models import TaskSchema, Task
 from coaction.forms import TaskForm
-from datetime import date
+from datetime import datetime
 from pprint import pprint
 
 
@@ -17,39 +17,17 @@ def index():
 
 class TaskListView(APIView):
     def get(self):
-        return {"tasks": [{
-            "taskId": 1,
-            "title": "Pick up kid from daycare",
-            "userId": 1,
-            "orderId":1,
-            "timestamp": "2015-03-05",
-            "assignedIds":[1, 2, 3],
-            "status":"started",
-            "description":"kid stabbed another kid with safety scissors",
-            "comments":[{"taskId": 1, "commentId": 1, "userId": 2, "text": "OMG! little brady is crazy!"}],
-            "dueDate": "2015-03-06",
-            "todos":[{"todoId": 1, "userId": 1, "text": "fill up car with gas"}]
-        },
-            {
-            "taskId": 2,
-            "title": "Feed child",
-            "userId": 1,
-            "orderId": 2,
-            "timestamp": "2015-03-05",
-            "assignedIds":[3],
-            "status":"New",
-            "description":"Little brady hasn't had food in days",
-            "comments":[{"taskId": 1, "commentId": 1, "userId": 3, "text": "OMG! little brady is hungry!"}],
-            "dueDate": "2015-03-09",
-            "todos":[{"taskId": 1, "todoId": 3, "userId": 1, "text": "Make pb and j"}]
-            }]
-        }
+        tasks = Task.query.all()
+        serializer = TaskSchema(many=True)
+        result = serializer.dump(tasks)
+        return {"tasks": result.data}
 
     def post(self):
         data = request.get_json(force=True)
         form = TaskForm(data=data, formdata=None, csrf_enabled=False)
         if form.validate():
             task = Task(**form.data)
+            task.timestamp = datetime.today()
             db.session.add(task)
             db.session.commit()
             result = TaskSchema().dump(task)
@@ -61,19 +39,34 @@ class TaskListView(APIView):
 
 class TaskView(APIView):
     def get(self, id):
-        return {
-            "taskId": id,
-            "title": "Feed child",
-            "userId": 1,
-            "orderId": 1,
-            "timestamp": "2015-03-05",
-            "assignedIds":[3],
-            "status":"New",
-            "description":"Little brady hasn't had food in days",
-            "comments":[{"taskId": 2, "commentId": 1, "userId": 3, "text": "OMG! little brady is hungry!"}],
-            "dueDate": "2015-03-09",
-            "todos":[{"taskId": 2, "todoId": 3, "userId": 1, "text": "Make pb and j"}]
-            }
+        task = Task.query.get_or_404(id)
+        serializer = TaskSchema()
+        result = serializer.dump(task)
+        return result.data
+
+    def delete(self, id):
+        task = Task.query.get_or_404(id)
+        db.session.delete(task)
+        db.session.commit()
+        serializer = TaskSchema()
+        result = serializer.dump(task)
+        return {"deleted": result.data}
+
+    def put(self, id):
+        data = request.get_json(force=True)
+        task = Task.query.get_or_404(id)
+        for key, value in data.items():
+            setattr(task, key, value)
+        form = TaskForm(obj=task, csrf_enabled=False)
+        if form.validate():
+            db.session.add(task)
+            db.session.commit()
+            result = TaskSchema().dump(task)
+            return result.data
+        else:
+            return {"form": "not validated"}
+
+
 
 class UserView(APIView):
     def get(self, id):
