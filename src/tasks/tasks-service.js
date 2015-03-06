@@ -21,16 +21,15 @@ app.factory('tasksService', ['$http', function($http) {
     },
 
     viewTask: function (id) {
-      console.log(id);
       return get('/api/tasks/' + id);
     },
 
     addTask: function(task) {
-      return processAjaxPromise($http.post('/api/tasks', task));
+      return processAjaxPromise($http.post('/api/tasks/', task));
     },
 
     deleteTask: function(id) {
-      return processAjaxPromise($http.delete('/api/tasks', id));
+      return processAjaxPromise($http.delete('/api/tasks/' + id + '/'));
     }
   };
 }]);

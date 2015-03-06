@@ -10,7 +10,8 @@ app.config(['$routeProvider', function($routeProvider) {
 .controller('NewTaskCtrl', ['tasksService', 'Task', '$window', function (tasksService, Task, $window) {
   var self = this;
   self.task = Task();
-
+  console.log(self.task);
+  
   self.addTask = function() {
     tasksService.addTask(self.task);
 
