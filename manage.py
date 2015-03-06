@@ -3,8 +3,10 @@ import os
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
+from coaction.models import Task
 
 from coaction import create_app, db
+import datetime as dt
 
 
 app = create_app()
@@ -26,10 +28,42 @@ def make_shell_context():
 
 @manager.command
 def createdb():
-    """Creates the database with all model tables. 
+    """Creates the database with all model tables.
     Migrations are preferred."""
     db.create_all()
 
+@manager.command
+def seed():
+    """Seed first user with tasks"""
+    seed_data = [{'title':"Go Shopping",
+                  'status': "New",
+                #   'userId': 1,
+                  'duedate': "2015/3/15",
+                  'timestamp': "2015/3/6",
+                  'description': "Do some shopping",
+                  'orderId': "1",
+                  'assignedIds': '1'},
+                  {'title':"Do something else",
+                   'status': "New",
+                #    'userId': 1,
+                   'timestamp': "2015/3/6",
+                   'duedate': "2015/4/25",
+                   'description': "A new thing to do",
+                   'orderId': "2",
+                   'assignedIds': '2'}]
+
+    for seed in seed_data:
+        task=Task(title=seed['title'],
+               status=seed['status'],
+            #    userId=seed['userId'],
+               duedate=seed['duedate'],
+               description=seed['description'],
+               orderId=seed['orderId'],
+               assignedIds=seed['assignedIds'])
+
+        db.session.add(task)
+    db.session.commit()
+    print("{} tasks added.".format(len(seed_data)))
 
 if __name__ == '__main__':
     manager.run()
