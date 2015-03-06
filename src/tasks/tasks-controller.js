@@ -13,7 +13,7 @@ app.config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', routeDefinition);
   $routeProvider.when('/tasks', routeDefinition);
 }])
-.controller('TasksCtrl', ['tasks', 'tasksService', function (tasks, tasksService) {
+.controller('TasksCtrl', ['tasks', 'tasksService', '$window', function (tasks, tasksService, $window) {
   var self = this;
   self.tasks = tasks;
 
@@ -23,5 +23,9 @@ app.config(['$routeProvider', function($routeProvider) {
 
   self.markDone = function (task) {
     task.status = "Done";
+  };
+
+  self.editTask = function (id) {
+    $window.location.href= '#/tasks/' + id;
   };
 }]);

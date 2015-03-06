@@ -14,12 +14,13 @@ app.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider.when('/tasks/:id', routeDefinition);
 }])
-.controller('TaskCtrl', ['task', 'tasksService', function (task, tasksService) {
+.controller('TaskCtrl', ['task', 'tasksService', '$window', function (task, tasksService, $window) {
   var self = this;
   self.task = task;
-  console.log(self.task);
-  
+
   self.deleteTask = function (id) {
     tasksService.deleteTask(id);
+
+    $window.location.href = "#/tasks/";
   };
 }]);

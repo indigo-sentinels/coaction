@@ -23,7 +23,8 @@ app.config(['$routeProvider', function($routeProvider) {
 .controller('NewTaskCtrl', ['tasksService', 'Task', '$window', function (tasksService, Task, $window) {
   var self = this;
   self.task = Task();
-
+  console.log(self.task);
+  
   self.addTask = function() {
     tasksService.addTask(self.task);
 
@@ -49,13 +50,14 @@ app.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider.when('/tasks/:id', routeDefinition);
 }])
-.controller('TaskCtrl', ['task', 'tasksService', function (task, tasksService) {
+.controller('TaskCtrl', ['task', 'tasksService', '$window', function (task, tasksService, $window) {
   var self = this;
   self.task = task;
-  console.log(self.task);
-  
+
   self.deleteTask = function (id) {
     tasksService.deleteTask(id);
+
+    $window.location.href = "#/tasks/";
   };
 }]);
 
@@ -63,17 +65,17 @@ app.factory('Task', function() {
   return function (spec) {
     spec = spec || {};
     return {
-      title: spec.title || '',
-      userId: spec.userId || '',
-      taskId: spec.taskId || '',
-      timestamp: spec.timestamp || '',
-      assignedIds: spec.assignedIds || [],
-      status: spec.status || '',
-      description: spec.description || '',
-      comments: spec.comments || [],
-      dueDate: spec.dueDate || '',
-      todos: spec.todos || [],
-      orderId: spec.orderId || ''
+      "title": spec.title || "",
+      "userId": spec.userId || "",
+      "taskId": spec.taskId || "",
+      "timestamp": spec.timestamp || "",
+      "assignedIds": spec.assignedIds,
+      "status": spec.status || "",
+      "description": spec.description || "",
+      "comments": spec.comments,
+      "dueDate": spec.dueDate || "",
+      "todos": spec.todos,
+      "orderId": spec.orderId
     };
   };
 });
@@ -93,7 +95,7 @@ app.config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', routeDefinition);
   $routeProvider.when('/tasks', routeDefinition);
 }])
-.controller('TasksCtrl', ['tasks', 'tasksService', function (tasks, tasksService) {
+.controller('TasksCtrl', ['tasks', 'tasksService', '$window', function (tasks, tasksService, $window) {
   var self = this;
   self.tasks = tasks;
 
@@ -103,6 +105,10 @@ app.config(['$routeProvider', function($routeProvider) {
 
   self.markDone = function (task) {
     task.status = "Done";
+  };
+
+  self.editTask = function (id) {
+    $window.location.href= '#/tasks/' + id;
   };
 }]);
 
@@ -129,16 +135,15 @@ app.factory('tasksService', ['$http', function($http) {
     },
 
     viewTask: function (id) {
-      console.log(id);
       return get('/api/tasks/' + id);
     },
 
     addTask: function(task) {
-      return processAjaxPromise($http.post('/api/tasks', task));
+      return processAjaxPromise($http.post('/api/tasks/', task));
     },
 
     deleteTask: function(id) {
-      return processAjaxPromise($http.delete('/api/tasks', id));
+      return processAjaxPromise($http.delete('/api/tasks/' + id + '/'));
     }
   };
 }]);
