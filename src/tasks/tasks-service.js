@@ -5,19 +5,23 @@ app.factory('tasksService', ['$http', function($http) {
 
   function processAjaxPromise(p) {
     return p.then(function (result) {
-      return result.data.tasks;
+      return result.data;
     })
     .catch(function (error) {
       $log.log(error);
+      throw error;
     });
   }
 
   return {
     list: function () {
-      return get('/api/tasks');
+      return get('/api/tasks').then(function (result) {
+        return result.tasks;
+      });
     },
 
     viewTask: function (id) {
+      console.log(id);
       return get('/api/tasks/' + id);
     },
 
@@ -25,8 +29,8 @@ app.factory('tasksService', ['$http', function($http) {
       return processAjaxPromise($http.post('/api/tasks', task));
     },
 
-    deleteTask: function(task) {
-      return processAjaxPromise($http.delete('/api/tasks', task));
+    deleteTask: function(id) {
+      return processAjaxPromise($http.delete('/api/tasks', id));
     }
   };
 }]);

@@ -1,7 +1,8 @@
-<h2>WE ARE HERE</h2>
+<a ng-href="#/tasks/new"><button>+ Add New Task</button></a>
 <div ng-repeat="task in vm.tasks | orderBy: 'timestamp': reverse=true">
   <h1>{{task.title}}</h1>
   <p>{{task.description}}</p>
   <p>{{task.status}}</p>
   <p>{{task.dueDate}}</p>
+  <button ng-click="vm.markDone(task)">Done</button>
 </div>

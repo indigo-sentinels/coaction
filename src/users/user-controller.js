@@ -1,6 +1,6 @@
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'users/user.html',
+    templateUrl: 'static/users/user.html',
     controller: 'UserCtrl',
     controllerAs: 'vm',
     resolve: {

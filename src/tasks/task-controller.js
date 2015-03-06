@@ -1,6 +1,6 @@
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'tasks/task.html',
+    templateUrl: 'static/tasks/task.html',
     controller: 'TaskCtrl',
     controllerAs: 'vm',
     resolve: {
@@ -14,7 +14,12 @@ app.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider.when('/tasks/:id', routeDefinition);
 }])
-.controller('TaskCtrl', ['task', function (task) {
+.controller('TaskCtrl', ['task', 'tasksService', function (task, tasksService) {
   var self = this;
   self.task = task;
+  console.log(self.task);
+  
+  self.deleteTask = function (id) {
+    tasksService.deleteTask(id);
+  };
 }]);

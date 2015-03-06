@@ -13,7 +13,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'tasks/new-task.html',
+    templateUrl: 'static/tasks/new-task.html',
     controller: 'NewTaskCtrl',
     controllerAs: 'vm'
   };
@@ -29,13 +29,13 @@ app.config(['$routeProvider', function($routeProvider) {
 
     self.task = Task();
 
-    // $window.location.href= "#/shares"; TODO
+    $window.location.href= "#/tasks";
   };
 }]);
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'tasks/task.html',
+    templateUrl: 'static/tasks/task.html',
     controller: 'TaskCtrl',
     controllerAs: 'vm',
     resolve: {
@@ -49,9 +49,14 @@ app.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider.when('/tasks/:id', routeDefinition);
 }])
-.controller('TaskCtrl', ['task', function (task) {
+.controller('TaskCtrl', ['task', 'tasksService', function (task, tasksService) {
   var self = this;
   self.task = task;
+  console.log(self.task);
+  
+  self.deleteTask = function (id) {
+    tasksService.deleteTask(id);
+  };
 }]);
 
 app.factory('Task', function() {
@@ -75,7 +80,7 @@ app.factory('Task', function() {
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: '/static/tasks/tasks.html',
+    templateUrl: 'static/tasks/tasks.html',
     controller: 'TasksCtrl',
     controllerAs: 'vm',
     resolve: {
@@ -88,9 +93,17 @@ app.config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', routeDefinition);
   $routeProvider.when('/tasks', routeDefinition);
 }])
-.controller('TasksCtrl', ['tasks', function (tasks) {
+.controller('TasksCtrl', ['tasks', 'tasksService', function (tasks, tasksService) {
   var self = this;
   self.tasks = tasks;
+
+  self.deleteTask = function (id) {
+    tasksService.deleteTask(id);
+  };
+
+  self.markDone = function (task) {
+    task.status = "Done";
+  };
 }]);
 
 app.factory('tasksService', ['$http', function($http) {
@@ -100,19 +113,23 @@ app.factory('tasksService', ['$http', function($http) {
 
   function processAjaxPromise(p) {
     return p.then(function (result) {
-      return result.data.tasks;
+      return result.data;
     })
     .catch(function (error) {
       $log.log(error);
+      throw error;
     });
   }
 
   return {
     list: function () {
-      return get('/api/tasks');
+      return get('/api/tasks').then(function (result) {
+        return result.tasks;
+      });
     },
 
     viewTask: function (id) {
+      console.log(id);
       return get('/api/tasks/' + id);
     },
 
@@ -120,20 +137,20 @@ app.factory('tasksService', ['$http', function($http) {
       return processAjaxPromise($http.post('/api/tasks', task));
     },
 
-    deleteTask: function(task) {
-      return processAjaxPromise($http.delete('/api/tasks', task));
+    deleteTask: function(id) {
+      return processAjaxPromise($http.delete('/api/tasks', id));
     }
   };
 }]);
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'users/new-user.html',
+    templateUrl: 'static/users/new-user.html',
     controller: 'NewUserCtrl',
     controllerAs: 'vm'
   };
 
-  $routeProvider.when('/users/new', routeDefinition);
+  $routeProvider.when('/signup', routeDefinition);
 }])
 .controller('NewUserCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
   var self = this;
@@ -144,13 +161,13 @@ app.config(['$routeProvider', function($routeProvider) {
 
     self.user = User();
 
-    // $window.location.href= "#/shares"; TODO
+    $window.location.href= "#/tasks";
   };
 }]);
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'users/user.html',
+    templateUrl: 'static/users/user.html',
     controller: 'UserCtrl',
     controllerAs: 'vm',
     resolve: {

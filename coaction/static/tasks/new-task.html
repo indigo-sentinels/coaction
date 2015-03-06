@@ -1,0 +1,19 @@
+<h1>New Task</h1>
+<form ng-submit="vm.addTask()">
+  <input ng-model="vm.task.title" required placeholder="title">
+  <input ng-model="vm.task.description" required placeholder="description">
+  <input ng-model="vm.task.dueDate" required placeholder="dueDate">
+
+  <select ng-model="vm.tasks.status" required placeholder="status">
+    <option value="started">Started</option>
+    <option value="new">New</option>
+    <option value="done">Done</option>
+  </select>
+
+  <button type="submit">Save</button>
+
+  <!-- <div ng-repeat="id in vm.tasks.assignedIds">
+    <input ng-model="id">
+  </div> -->
+
+</form>
