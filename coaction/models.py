@@ -48,6 +48,8 @@ class Task(db.Model):
     taskId = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(255))
     status = db.Column(db.String(255), default="New")
+    # userId = db.Column(db.Integer, db.ForeignKey('user.id'))
+    # timestamp = db.Column(db.DateTime)
 
 
     def __init__(self, title, status):
