@@ -39,7 +39,7 @@ class Comment(db.Model):
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     text = db.Column(db.String(255), nullable=False)
     task = db.relationship('Task',
-                           backref=db.backref('comments', lazy='dynamic'))
+                           backref=db.backref('comment_list', lazy='dynamic'))
 
     def __init__(self, taskId, text):
         self.taskId = taskId
@@ -86,6 +86,7 @@ class TaskSchema(Schema):
 
     class Meta:
         fields = ('taskId', 'title', 'status', 'timestamp', 'duedate', 'description', 'assignedIds', 'orderId', 'comments')
+
 
 
 class Todo(db.Model):
