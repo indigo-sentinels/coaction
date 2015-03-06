@@ -10,3 +10,9 @@ class TaskForm(Form):
     duedate = DateField('Date')
     assignedIds = IntegerField("assignedIds")
     orderId = IntegerField('orderId')
+    comments = StringField("comment", default=None)
+
+class CommentForm(Form):
+    taskId = IntegerField("taskId")
+    text = StringField("text", validators=[DataRequired()])
+

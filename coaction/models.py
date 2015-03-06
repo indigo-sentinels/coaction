@@ -1,5 +1,5 @@
 from .extensions import db, login_manager
-from flask.ext.login import UserMixin
+from flask.ext.login import UserMixin, current_user
 from marshmallow import Schema, fields
 from sqlalchemy import func
 from datetime import datetime
@@ -33,19 +33,23 @@ class User(db.Model, UserMixin):
         return "<User {}>".format(self.email)
 
 
-# class Task(db.Model):
-# taskId = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     title = db.Column(db.String(255))
-#     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
-#     timestamp = db.Column(db.DateTime)
-#     ## Assigned IDs is going to need attention
-#     assignedIds = db.Column(db.Integer)
-#     status = db.Column(db.String(255), default="New")
-#     description = db.Column(db.String(255))
-#     duedate = db.Column(db.DateTime)
-#     orderId = db.Column(db.Integer)
-#     user = db.relationship('User',
-#         backref=db.backref('tasks', lazy='dynamic'))
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    taskId = db.Column(db.Integer, db.ForeignKey('task.taskId'))
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
+    text = db.Column(db.String(255), nullable=False)
+    task = db.relationship('Task',
+                           backref=db.backref('comment_list', lazy='dynamic'))
+
+    def __init__(self, taskId, text):
+        self.taskId = taskId
+        self.userId = 1
+        self.text = text
+
+class CommentSchema(Schema):
+    class Meta:
+        fields = ('id', 'taskId', 'userId', 'text')
+
 
 class Task(db.Model):
     taskId = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -67,28 +71,22 @@ class Task(db.Model):
             return datetime.strptime(date, "%Y/%m/%d")
 
 
-    def __init__(self, title, status, duedate, description, assignedIds, orderId):
+    def __init__(self, title, status, duedate, description, assignedIds, orderId, comments):
         self.title = title
         self.status = status
         self.duedate = self.check_date(duedate)
         self.description = description
         self.assignedIds = assignedIds
         self.orderId = orderId
-
+        self.comments = comments
 
 
 class TaskSchema(Schema):
+    comments = fields.Nested(CommentSchema, many=True)
+
     class Meta:
-        fields = ('taskId', 'title', 'status', 'timestamp', 'duedate', 'description', 'assignedIds', 'orderId')
+        fields = ('taskId', 'title', 'status', 'timestamp', 'duedate', 'description', 'assignedIds', 'orderId', 'comments')
 
-
-class Comment(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    taskId = db.Column(db.Integer, db.ForeignKey('task.taskId'))
-    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
-    text = db.Column(db.String(255), nullable=False)
-    task = db.relationship('Task',
-                           backref=db.backref('comments', lazy='dynamic'))
 
 
 class Todo(db.Model):
