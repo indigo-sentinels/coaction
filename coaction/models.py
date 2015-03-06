@@ -71,20 +71,21 @@ class Task(db.Model):
             return datetime.strptime(date, "%Y/%m/%d")
 
 
-    def __init__(self, title, status, duedate, description, assignedIds, orderId):
+    def __init__(self, title, status, duedate, description, assignedIds, orderId, comments):
         self.title = title
         self.status = status
         self.duedate = self.check_date(duedate)
         self.description = description
         self.assignedIds = assignedIds
         self.orderId = orderId
+        self.comments = comments
 
 
 class TaskSchema(Schema):
-    comments = fields.Nested(CommentSchema)
+    comments = fields.Nested(CommentSchema, many=True)
 
     class Meta:
-        fields = ('taskId', 'title', 'status', 'timestamp', 'duedate', 'description', 'assignedIds', 'orderId')
+        fields = ('taskId', 'title', 'status', 'timestamp', 'duedate', 'description', 'assignedIds', 'orderId', 'comments')
 
 
 class Todo(db.Model):

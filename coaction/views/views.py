@@ -40,9 +40,11 @@ class TaskListView(APIView):
 class TaskView(APIView):
     def get(self, id):
         task = Task.query.get_or_404(id)
-        serializer = TaskSchema()
-        result = serializer.dump(task)
-        return result.data
+        comments = Comment.query.filter_by(taskId = id).all()
+        task.comments = comments
+        task_serializer = TaskSchema()
+        task_result = task_serializer.dump(task)
+        return task_result.data
 
     def delete(self, id):
         task = Task.query.get_or_404(id)
