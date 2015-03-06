@@ -5,7 +5,7 @@ app.config(['$routeProvider', function($routeProvider) {
     controllerAs: 'vm'
   };
 
-  $routeProvider.when('/users/new', routeDefinition);
+  $routeProvider.when('/signup', routeDefinition);
 }])
 .controller('NewUserCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
   var self = this;
@@ -16,6 +16,6 @@ app.config(['$routeProvider', function($routeProvider) {
 
     self.user = User();
 
-    // $window.location.href= "#/shares"; TODO
+    $window.location.href= "#/tasks";
   };
 }]);

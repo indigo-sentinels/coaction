@@ -13,7 +13,15 @@ app.config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', routeDefinition);
   $routeProvider.when('/tasks', routeDefinition);
 }])
-.controller('TasksCtrl', ['tasks', function (tasks) {
+.controller('TasksCtrl', ['tasks', 'tasksService', function (tasks, tasksService) {
   var self = this;
   self.tasks = tasks;
+
+  self.deleteTask = function (id) {
+    tasksService.deleteTask(id);
+  };
+
+  self.markDone = function (task) {
+    task.status = "Done";
+  };
 }]);

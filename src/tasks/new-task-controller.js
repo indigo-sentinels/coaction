@@ -16,6 +16,6 @@ app.config(['$routeProvider', function($routeProvider) {
 
     self.task = Task();
 
-    // $window.location.href= "#/shares"; TODO
+    $window.location.href= "#/tasks";
   };
 }]);
