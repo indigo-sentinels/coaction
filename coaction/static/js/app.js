@@ -13,7 +13,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'tasks/new-task.html',
+    templateUrl: 'static/tasks/new-task.html',
     controller: 'NewTaskCtrl',
     controllerAs: 'vm'
   };
@@ -75,7 +75,7 @@ app.factory('Task', function() {
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: '/static/tasks/tasks.html',
+    templateUrl: 'static/tasks/tasks.html',
     controller: 'TasksCtrl',
     controllerAs: 'vm',
     resolve: {
@@ -128,7 +128,7 @@ app.factory('tasksService', ['$http', function($http) {
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'users/new-user.html',
+    templateUrl: 'static/users/new-user.html',
     controller: 'NewUserCtrl',
     controllerAs: 'vm'
   };
@@ -150,7 +150,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'users/user.html',
+    templateUrl: 'static/users/user.html',
     controller: 'UserCtrl',
     controllerAs: 'vm',
     resolve: {
