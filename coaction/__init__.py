@@ -1,8 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask
 
 from . import models
 from .extensions import db, migrate, config
-from .views import coaction
+from .views.views import coaction
+from .views.home import home
 
 
 SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/coaction.db"
@@ -13,6 +14,7 @@ SECRET_KEY = 'development-key'
 def create_app():
     app = Flask(__name__)
     app.config.from_object(__name__)
+    app.register_blueprint(home)
     app.register_blueprint(coaction, url_prefix='/api')
 
     config.init_app(app)
