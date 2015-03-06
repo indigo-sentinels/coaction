@@ -10,7 +10,6 @@ from datetime import date
 from pprint import pprint
 
 
-
 coaction = Blueprint("coaction", __name__, static_folder="./static")
 
 @coaction.route("/")
