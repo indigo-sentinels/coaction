@@ -79,7 +79,7 @@ class Task(db.Model):
 
 class TaskSchema(Schema):
     class Meta:
-        fields = ('title', 'status', 'timestamp', 'duedate', 'description', 'assignedIds', 'orderId')
+        fields = ('taskId', 'title', 'status', 'timestamp', 'duedate', 'description', 'assignedIds', 'orderId')
 
 
 class Comment(db.Model):

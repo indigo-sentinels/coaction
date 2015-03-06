@@ -39,10 +39,34 @@ class TaskListView(APIView):
 
 class TaskView(APIView):
     def get(self, id):
-        task = Task.query.get(id)
+        task = Task.query.get_or_404(id)
         serializer = TaskSchema()
         result = serializer.dump(task)
         return result.data
+
+    def delete(self, id):
+        task = Task.query.get_or_404(id)
+        db.session.delete(task)
+        db.session.commit()
+        serializer = TaskSchema()
+        result = serializer.dump(task)
+        return {"deleted": result.data}
+
+    def put(self, id):
+        data = request.get_json(force=True)
+        task = Task.query.get_or_404(id)
+        for key, value in data.items():
+            setattr(task, key, value)
+        form = TaskForm(obj=task, csrf_enabled=False)
+        if form.validate():
+            db.session.add(task)
+            db.session.commit()
+            result = TaskSchema().dump(task)
+            return result.data
+        else:
+            return {"form": "not validated"}
+
+
 
 class UserView(APIView):
     def get(self, id):
