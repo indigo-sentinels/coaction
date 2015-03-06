@@ -3,9 +3,12 @@ from flask.ext.login import login_user, current_user
 from flask import Blueprint, flash, jsonify, request
 from .api_helpers import returns_json, APIView, api_form
 from .extensions import db
-from .models import Task
+from .models import TaskSchema, Task
 from .forms import TaskForm
+from flask.ext.marshmallow import Marshmallow
 from datetime import date
+from pprint import pprint
+
 
 
 
@@ -47,18 +50,18 @@ class TaskListView(APIView):
         }
 
     def post(self):
-        body = request.get_data(as_text='true')
-        data = json.loads(body)
-        form = TaskForm(data=data, formdata=None)
+        data = request.get_json(force=True)
+        form = TaskForm(data=data, formdata=None, csrf_enabled=False)
         if form.validate():
             task = Task(**form.data)
-            task.user_id = 1
-            task.timestamp = date.today()
             db.session.add(task)
             db.session.commit()
-            return {"success":"yay"}
+            result = TaskSchema().dump(task)
+            return result.data
         else:
-            return form.errors
+            return {"form": "not validated"}
+
+
 
 class TaskView(APIView):
     def get(self, id):
