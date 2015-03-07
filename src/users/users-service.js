@@ -22,13 +22,19 @@ app.factory('usersService', ['$http', function($http) {
     },
 
     registerUser: function(user) {
-      return processAjaxPromise($http.post('/register/', user));
+      return processAjaxPromise($http.post('/api/register/', user));
+    },
+
+    loginUser: function(user) {
+      return processAjaxPromise($http.post('/api/login/', user));
+    },
+
+    logoutUser: function() {
+      return processAjaxPromise($http.post('/api/logout/'));
     },
 
     deleteUser: function(id) {
-      return processAjaxPromise($http.delete('/api/users' + id + '/'));
+      return processAjaxPromise($http.delete('/api/users/' + id + '/'));
     }
-
-
   };
 }]);
