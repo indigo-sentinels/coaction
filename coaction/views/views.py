@@ -59,14 +59,10 @@ class TaskView(APIView):
         task = Task.query.get_or_404(id)
         for key, value in data.items():
             setattr(task, key, value)
-        form = TaskForm(obj=task, csrf_enabled=False)
-        if form.validate():
-            db.session.add(task)
-            db.session.commit()
-            result = TaskSchema().dump(task)
-            return result.data
-        else:
-            return {"form": "not validated"}
+        db.session.add(task)
+        db.session.commit()
+        result = TaskSchema().dump(task)
+        return result.data
 
 class CommentListView(APIView):
     def get(self, id):
