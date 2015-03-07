@@ -28,8 +28,16 @@ app.factory('tasksService', ['$http', function($http) {
       return processAjaxPromise($http.post('/api/tasks/', task));
     },
 
+    editTask: function (id, task) {
+      return processAjaxPromise($http.put('/api/tasks/' + id + '/', task));
+    },
+
     deleteTask: function(id) {
       return processAjaxPromise($http.delete('/api/tasks/' + id + '/'));
+    },
+
+    addComment: function(id, comment) {
+      return processAjaxPromise($http.post('/api/tasks/' + id + '/comments/', comment));
     }
   };
 }]);

@@ -1,6 +1,6 @@
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'static/tasks/new-task.html',
+    templateUrl: 'static/tasks/task-input-view.html',
     controller: 'NewTaskCtrl',
     controllerAs: 'vm'
   };
@@ -11,11 +11,14 @@ app.config(['$routeProvider', function($routeProvider) {
   var self = this;
   self.task = Task();
   console.log(self.task);
-  
-  self.addTask = function() {
-    tasksService.addTask(self.task);
 
-    self.task = Task();
+  self.addTask = function() {
+    if (!self.task.taskId) {
+      tasksService.addTask(self.task);
+      self.task = Task();
+    } else {
+      tasksService.editTask(self.task);
+    }
 
     $window.location.href= "#/tasks";
   };

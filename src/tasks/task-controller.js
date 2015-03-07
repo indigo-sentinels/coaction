@@ -17,10 +17,31 @@ app.config(['$routeProvider', function($routeProvider) {
 .controller('TaskCtrl', ['task', 'tasksService', '$window', function (task, tasksService, $window) {
   var self = this;
   self.task = task;
+  self.commentAdded = undefined;
+
+  self.editTask = function (id) {
+    $window.location.href= '#/tasks/' + id + '/edit/';
+  };
 
   self.deleteTask = function (id) {
     tasksService.deleteTask(id);
 
     $window.location.href = "#/tasks/";
+  };
+
+  self.createComment = function (taskId, userId, text) {
+    self.task.comments.push({
+      taskId: taskId || '',
+      userId: userId || '',
+      text: text || ''
+    });
+
+    self.commentAdded = true;
+  };
+
+  self.addComment = function (id, comment) {
+    tasksService.addComment(id, comment);
+    self.commentAdded = undefined;
+    $window.location.href = '#/tasks/' + id;
   };
 }]);
