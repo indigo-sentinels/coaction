@@ -7,7 +7,7 @@ from .views.home import home
 from .views.user import user
 
 
-SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/coaction.db"
+SQLALCHEMY_DATABASE_URI = "postgres://localhost/coaction"
 DEBUG = True
 SECRET_KEY = 'development-key'
 
