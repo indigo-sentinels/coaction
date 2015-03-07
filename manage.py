@@ -35,22 +35,28 @@ def createdb():
 @manager.command
 def seed():
     """Seed first user with tasks"""
-    seed_data = [{'title':"Go Shopping",
+    seed_data = [{
+                  'title':"Go Shopping",
                   'status': "New",
                 #   'userId': 1,
                   'duedate': "2015/3/15",
                   'timestamp': "2015/3/6",
                   'description': "Do some shopping",
                   'orderId': "1",
-                  'assignedIds': '1'},
-                  {'title':"Do something else",
+                  'assignedIds': '1',
+                  'comments': "comment"
+                  },
+                  {
+                  'title':"Do something else",
                    'status': "New",
                 #    'userId': 1,
                    'timestamp': "2015/3/6",
                    'duedate': "2015/4/25",
                    'description': "A new thing to do",
                    'orderId': "2",
-                   'assignedIds': '2'}]
+                   'assignedIds': '2',
+                   'comments': "comment2"
+                   }]
 
     for seed in seed_data:
         task=Task(title=seed['title'],
@@ -59,7 +65,8 @@ def seed():
                duedate=seed['duedate'],
                description=seed['description'],
                orderId=seed['orderId'],
-               assignedIds=seed['assignedIds'])
+               assignedIds=seed['assignedIds'],
+               comments=seed['comments'])
 
         db.session.add(task)
     db.session.commit()
