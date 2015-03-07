@@ -1,7 +1,7 @@
 import base64
 from flask import Blueprint, request
 from flask.ext.login import current_user, abort, login_user, logout_user
-from ..models import User, UserSchema
+from ..models import User, UserSchema, Task, TaskSchema
 from ..extensions import db, login_manager
 from ..api_helpers import APIView, returns_json
 from ..forms import RegistrationForm, LoginForm
@@ -83,10 +83,17 @@ class Logout(APIView):
         logout_user()
         return {"result": "logged out"}
 
+class UserTasks(APIView):
+    def get(self, id):
+        tasks = Task.query.filter_by(userId = id)
+        serializer = TaskSchema(many=True)
+        result = serializer.dump(tasks)
+        return {"tasks": result.data}
+
+
 
 user.add_url_rule('/users/', view_func=UserView.as_view('user'))
 user.add_url_rule('/login/', view_func=Login.as_view('login'))
 user.add_url_rule('/register/', view_func=Register.as_view('register'))
 user.add_url_rule('/logout/', view_func=Logout.as_view('logout'))
-
-
+user.add_url_rule('/users/<int:id>/tasks', view_func=UserTasks.as_view('usertasks'))
