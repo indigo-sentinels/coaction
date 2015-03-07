@@ -197,7 +197,7 @@ app.config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', routeDefinition);
   $routeProvider.when('/tasks', routeDefinition);
 }])
-.controller('TasksCtrl', ['tasks', 'tasksService', '$window', function (tasks, tasksService, $window) {
+.controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', function (tasks, tasksService, usersService, $window) {
   var self = this;
   self.tasks = tasks;
 
@@ -205,12 +205,17 @@ app.config(['$routeProvider', function($routeProvider) {
     tasksService.deleteTask(id);
   };
 
-  self.markDone = function (task) {
-    task.status = "Done";
-  };
+  // self.markDone = function (task) {
+  //   tasksService.editTask(task);
+  // };
 
   self.editTask = function (id) {
     $window.location.href= '#/tasks/' + id;
+  };
+
+  self.logoutUser = function() {
+    usersService.logoutUser();
+    $window.location.href= '#/login/';
   };
 }]);
 
@@ -377,6 +382,10 @@ app.factory('usersService', ['$http', function($http) {
 
     loginUser: function(user) {
       return processAjaxPromise($http.post('/api/login/', user));
+    },
+
+    logoutUser: function() {
+      return processAjaxPromise($http.post('/api/logout/'));
     },
 
     deleteUser: function(id) {

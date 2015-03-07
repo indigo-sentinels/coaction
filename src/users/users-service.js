@@ -29,6 +29,10 @@ app.factory('usersService', ['$http', function($http) {
       return processAjaxPromise($http.post('/api/login/', user));
     },
 
+    logoutUser: function() {
+      return processAjaxPromise($http.post('/api/logout/'));
+    },
+
     deleteUser: function(id) {
       return processAjaxPromise($http.delete('/api/users/' + id + '/'));
     }

@@ -1,8 +1,10 @@
+<button ng-click="vm.logoutUser()">Logout</button>
+
 <a ng-href="#/tasks/new"><button>+ Add New Task</button></a>
 <div ng-repeat="task in vm.tasks | orderBy: 'timestamp': reverse=true" ng-click="vm.editTask(task.taskId)">
   <h1>{{task.title}}</h1>
   <p>{{task.description}}</p>
   <p>{{task.status}}</p>
   <p>{{task.dueDate}}</p>
-  <button ng-click="vm.markDone(task)">Done</button>
+  <!-- <button ng-click="vm.markDone(task)">Done</button> -->
 </div>
