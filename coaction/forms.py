@@ -28,7 +28,7 @@ class TodoForm(Form):
 
 class RegistrationForm(Form):
     name = StringField('Name', validators=[DataRequired()])
-    email = EmailField('Email', validators=[DataRequired(), Email()])
+    email = EmailField('Email', validators=[DataRequired()])
     password = StringField(
         'Password',
         validators=[DataRequired()])

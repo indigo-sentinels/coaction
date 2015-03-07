@@ -360,6 +360,7 @@ app.factory('usersService', ['$http', function($http) {
 
   function processAjaxPromise(p) {
     return p.then(function (result) {
+      console.log(result.data);
       return result.data;
     })
     .catch(function (error) {
