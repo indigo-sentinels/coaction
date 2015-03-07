@@ -3,7 +3,7 @@ import os
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import MigrateCommand
 from flask.ext.script.commands import ShowUrls, Clean
-from coaction.models import Task
+from coaction.models import Task, Comment, User
 
 from coaction import create_app, db
 import datetime as dt
@@ -35,7 +35,7 @@ def createdb():
 @manager.command
 def seed():
     """Seed first user with tasks"""
-    seed_data = [{
+    task_seed_data = [{
                   'title':"Go Shopping",
                   'status': "New",
                 #   'userId': 1,
@@ -44,7 +44,8 @@ def seed():
                   'description': "Do some shopping",
                   'orderId': "1",
                   'assignedIds': '1',
-                  'comments': "comment"
+                  'comments': "comment",
+                  'todos': "todo1"
                   },
                   {
                   'title':"Do something else",
@@ -55,10 +56,16 @@ def seed():
                    'description': "A new thing to do",
                    'orderId': "2",
                    'assignedIds': '2',
-                   'comments': "comment2"
+                   'comments': "comment2",
+                   'todos': "todo2"
                    }]
+    comment_seed_data = [{
+                    'text': "what a cool task",
+                    'taskId': "1"
+                    # 'userId': "1"
+                    }]
 
-    for seed in seed_data:
+    for seed in task_seed_data:
         task=Task(title=seed['title'],
                status=seed['status'],
             #    userId=seed['userId'],
@@ -66,11 +73,18 @@ def seed():
                description=seed['description'],
                orderId=seed['orderId'],
                assignedIds=seed['assignedIds'],
-               comments=seed['comments'])
+               comments=seed['comments'],
+               todos=seed['todos'])
 
         db.session.add(task)
+    for seed in comment_seed_data:
+        comment=Comment(text=seed['text'],
+                        taskId=seed['taskId']
+                        # userId=seed['userId']
+                        )
+        db.session.add(comment)
     db.session.commit()
-    print("{} tasks added.".format(len(seed_data)))
+    print("{} tasks added.".format(len(task_seed_data)))
 
 if __name__ == '__main__':
     manager.run()
