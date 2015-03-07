@@ -45,10 +45,8 @@ def returns_json(f):
     def decorated_function(*args, **kwargs):
         retval = f(*args, **kwargs)
         if type(retval) is Response:
-            print('response')
             return retval
         elif type(retval) is tuple:
-            print('tuple')
             print(retval)
             response = jsonify(retval[0])
             if len(retval) > 1:
@@ -58,7 +56,6 @@ def returns_json(f):
                     response.headers[key] = value
             return response
         else:
-            print('jsonify')
             return jsonify(retval)
 
     return decorated_function
