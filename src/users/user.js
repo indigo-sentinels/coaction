@@ -2,8 +2,8 @@ app.factory('User', function() {
   return function (spec) {
     spec = spec || {};
     return {
-      userId: spec.userId || '',
-      username: spec.username || '',
+      id: spec.id || '',
+      name: spec.name || '',
       password: spec.password || '',
       email: spec.email || ''
     };

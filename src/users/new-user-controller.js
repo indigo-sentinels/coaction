@@ -12,7 +12,7 @@ app.config(['$routeProvider', function($routeProvider) {
   self.user = User();
 
   self.addUser = function() {
-    usersService.addUser(self.user);
+    usersService.registerUser(self.user);
 
     self.user = User();
 
