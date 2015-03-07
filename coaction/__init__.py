@@ -16,7 +16,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(__name__)
     app.register_blueprint(home)
-    app.register_blueprint(user)
+    app.register_blueprint(user, url_prefix='/api')
     app.register_blueprint(coaction, url_prefix='/api')
 
     config.init_app(app)
