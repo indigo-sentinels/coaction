@@ -122,4 +122,5 @@ class TaskSchema(Schema):
                   'status', 'timestamp',
                   'duedate', 'description',
                   'assignedIds', 'orderId',
-                  'comments', 'todos')
+                  'comments', 'todos',
+                  'userId')
