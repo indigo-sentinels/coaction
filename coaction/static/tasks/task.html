@@ -1,5 +1,19 @@
-<h1>{{vm.task.title}}</h1>
-<p>{{vm.task.description}}</p>
-<p>{{vm.task.dueDate}}</p>
-<p>{{vm.task.status}}</p>
-<button ng-click="vm.deleteTask(vm.task.taskId)">Delete</button>
+<div ng-click="vm.editTask(vm.task.taskId)">
+  <h1>{{vm.task.title}}</h1>
+  <p>{{vm.task.description}}</p>
+  <p>{{vm.task.dueDate}}</p>
+  <p>{{vm.task.status}}</p>
+  <button ng-click="vm.deleteTask(vm.task.taskId)">Delete</button>
+</div>
+
+<div ng-repeat="comment in vm.task.comments">
+</div>
+
+<div ng-repeat="comment in vm.task.comments">
+  <p>{{comment.text}}</p>
+  <input ng-if="$last && !comment.id && vm.commentAdded" ng-model="comment.text">
+  <button ng-if="$last && !comment.id && vm.commentAdded" ng-click="vm.addComment(vm.task.taskId, comment)">Save</button>
+</div>
+
+
+<button ng-click="vm.createComment()">+ Add Comment</button>

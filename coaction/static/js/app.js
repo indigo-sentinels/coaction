@@ -13,7 +13,41 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'static/tasks/new-task.html',
+    templateUrl: 'static/tasks/task-input-view.html',
+    controller: 'EditTaskCtrl',
+    controllerAs: 'vm',
+    resolve: {
+      task: ['tasksService', '$route', function (tasksService, $route) {
+        var routeParams = $route.current.params;
+        var id = routeParams.id;
+        return tasksService.viewTask(id);
+      }]
+    }
+  };
+
+  $routeProvider.when('/tasks/:id/edit', routeDefinition);
+}])
+.controller('EditTaskCtrl', ['task', 'tasksService', '$window', function (task, tasksService, $window) {
+  var self = this;
+  self.task = task;
+
+  self.deleteTask = function (id) {
+    tasksService.deleteTask(id);
+
+    $window.location.href = "#/tasks/";
+  };
+
+  self.addTask = function() {
+    console.log(self.task);
+    tasksService.editTask(self.task.taskId, self.task);
+
+    $window.location.href= "#/tasks";
+  };
+}]);
+
+app.config(['$routeProvider', function($routeProvider) {
+  var routeDefinition = {
+    templateUrl: 'static/tasks/task-input-view.html',
     controller: 'NewTaskCtrl',
     controllerAs: 'vm'
   };
@@ -24,11 +58,14 @@ app.config(['$routeProvider', function($routeProvider) {
   var self = this;
   self.task = Task();
   console.log(self.task);
-  
-  self.addTask = function() {
-    tasksService.addTask(self.task);
 
-    self.task = Task();
+  self.addTask = function() {
+    if (!self.task.taskId) {
+      tasksService.addTask(self.task);
+      self.task = Task();
+    } else {
+      tasksService.editTask(self.task);
+    }
 
     $window.location.href= "#/tasks";
   };
@@ -53,13 +90,61 @@ app.config(['$routeProvider', function($routeProvider) {
 .controller('TaskCtrl', ['task', 'tasksService', '$window', function (task, tasksService, $window) {
   var self = this;
   self.task = task;
+  self.commentAdded = undefined;
+
+  self.editTask = function (id) {
+    $window.location.href= '#/tasks/' + id + '/edit/';
+  };
 
   self.deleteTask = function (id) {
     tasksService.deleteTask(id);
 
     $window.location.href = "#/tasks/";
   };
+
+  self.createComment = function (taskId, userId, text) {
+    self.task.comments.push({
+      taskId: taskId || '',
+      userId: userId || '',
+      text: text || ''
+    });
+
+    self.commentAdded = true;
+  };
+
+  self.addComment = function (id, comment) {
+    tasksService.addComment(id, comment);
+    self.commentAdded = undefined;
+    $window.location.href = '#/tasks/' + id;
+  };
 }]);
+
+app.directive('taskInputView', function () {
+  return {
+    // E = element
+    // A = attribute
+    // C = class (I wouldn't use this)
+    // M = comment (I wouldn't use this, either)
+    restrict: 'EA',
+    scope: {
+      // @ - Get value from attribute
+      // = - Value has 2-way binding
+      // & - Allows binding to a function
+      task: '=',
+      cssClass: '@'
+    },
+    controller: ['$scope', function ($scope) {
+      this.task = $scope.task;
+      this.cssClass = $scope.cssClass || '';
+    }],
+    controllerAs: 'vm',
+    templateUrl: 'static/tasks/task-input-view.html',
+    link: function ($scope, element, attrs) {
+      // If you need to manipulate the DOM, this is the
+      // only legit place to do it in the Angular world
+    }
+  };
+});
 
 app.factory('Task', function() {
   return function (spec) {
@@ -142,8 +227,16 @@ app.factory('tasksService', ['$http', function($http) {
       return processAjaxPromise($http.post('/api/tasks/', task));
     },
 
+    editTask: function (id, task) {
+      return processAjaxPromise($http.put('/api/tasks/' + id + '/', task));
+    },
+
     deleteTask: function(id) {
       return processAjaxPromise($http.delete('/api/tasks/' + id + '/'));
+    },
+
+    addComment: function(id, comment) {
+      return processAjaxPromise($http.post('/api/tasks/' + id + '/comments/', comment));
     }
   };
 }]);
@@ -245,7 +338,7 @@ app.factory('Comment', function() {
   return function (spec) {
     spec = spec || {};
     return {
-      commentId: spec.commentId || '',
+      id: spec.id || '',
       taskId: spec.taskId || '',
       userId: spec.userId || '',
       text: spec.text || ''
