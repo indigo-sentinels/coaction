@@ -32,7 +32,7 @@ def require_authorization():
         abort(401)
 
 
-class UserView(APIView):
+class UserListView(APIView):
     def get(self):
         users = User.query.all()
         if users:
@@ -41,6 +41,18 @@ class UserView(APIView):
             return {"users": result.data}
         else:
             return {"error": "no users!"}
+
+
+class UserView(APIView):
+    def get(self, id):
+        user = User.query.get(id)
+        if user:
+            serializer = UserSchema()
+            result = serializer.dump(user)
+            return result.data
+        else:
+            return {"error": "user not found"}
+
 
 
 class Register(APIView):
@@ -84,9 +96,11 @@ class Logout(APIView):
         return {"result": "logged out"}
 
 
-user.add_url_rule('/users/', view_func=UserView.as_view('user'))
+user.add_url_rule('/users/', view_func=UserListView.as_view('users'))
 user.add_url_rule('/login/', view_func=Login.as_view('login'))
 user.add_url_rule('/register/', view_func=Register.as_view('register'))
 user.add_url_rule('/logout/', view_func=Logout.as_view('logout'))
+user.add_url_rule('/users/<int:id>/', view_func=UserView.as_view('user'))
+
 
 
