@@ -18,6 +18,7 @@ app.config(['$routeProvider', function($routeProvider) {
   var self = this;
   self.task = task;
   self.commentAdded = undefined;
+  self.todoAdded = undefined;
 
   self.editTask = function (id) {
     $window.location.href= '#/tasks/' + id + '/edit/';
@@ -42,6 +43,22 @@ app.config(['$routeProvider', function($routeProvider) {
   self.addComment = function (id, comment) {
     tasksService.addComment(id, comment);
     self.commentAdded = undefined;
-    $window.location.href = '#/tasks/' + id;
+    // $window.location.href = '#/tasks/' + id;
+  };
+
+  self.createTodo = function (taskId, userId, text) {
+    self.task.todos.push({
+      taskId: taskId || '',
+      userId: userId || '',
+      text: text || ''
+    });
+
+    self.todoAdded = true;
+  };
+
+  self.addTodo = function (id, todo) {
+    tasksService.addTodo(id, todo);
+    self.todoAdded = undefined;
+    // $window.location.href = '#/tasks/' + id;
   };
 }]);

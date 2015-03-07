@@ -38,6 +38,18 @@ app.factory('tasksService', ['$http', function($http) {
 
     addComment: function(id, comment) {
       return processAjaxPromise($http.post('/api/tasks/' + id + '/comments/', comment));
+    },
+
+    deleteComment: function(id, commentId, comment) {
+      return processAjaxPromise($http.delete('/api/tasks/' + id + '/comments/' + commentId + '/'));
+    },
+
+    addTodo: function(id, todo) {
+      return processAjaxPromise($http.post('/api/tasks/' + id + '/todos/', todo));
+    },
+
+    deleteTodo: function(id, todoId, comment) {
+      return processAjaxPromise($http.delete('/api/tasks/' + id + '/todos/' + todoId + '/'));
     }
   };
 }]);

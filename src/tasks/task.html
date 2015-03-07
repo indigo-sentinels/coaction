@@ -6,14 +6,22 @@
   <button ng-click="vm.deleteTask(vm.task.taskId)">Delete</button>
 </div>
 
-<div ng-repeat="comment in vm.task.comments">
+<div>
+  <div ng-repeat="todo in vm.task.todos">
+    <p>{{todo.text}}</p>
+    <input ng-if="$last && !todo.id && vm.todoAdded" ng-model="todo.text">
+    <button ng-if="$last && !todo.id && vm.todoAdded" ng-click="vm.addTodo(vm.task.taskId, todo)">Save</button>
+  </div>
+
+  <button ng-click="vm.createTodo()">+ Add Todo</button>
 </div>
 
-<div ng-repeat="comment in vm.task.comments">
-  <p>{{comment.text}}</p>
-  <input ng-if="$last && !comment.id && vm.commentAdded" ng-model="comment.text">
-  <button ng-if="$last && !comment.id && vm.commentAdded" ng-click="vm.addComment(vm.task.taskId, comment)">Save</button>
+<div>
+  <div ng-repeat="comment in vm.task.comments">
+    <p>{{comment.text}}</p>
+    <input ng-if="$last && !comment.id && vm.commentAdded" ng-model="comment.text">
+    <button ng-if="$last && !comment.id && vm.commentAdded" ng-click="vm.addComment(vm.task.taskId, comment)">Save</button>
+  </div>
+
+  <button ng-click="vm.createComment()">+ Add Comment</button>
 </div>
-
-
-<button ng-click="vm.createComment()">+ Add Comment</button>
