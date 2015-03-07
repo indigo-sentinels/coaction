@@ -1,5 +1,5 @@
 from .extensions import db, login_manager
-from flask.ext.login import UserMixin, current_user
+from flask.ext.login import UserMixin
 from marshmallow import Schema, fields
 from sqlalchemy import func
 from datetime import datetime
@@ -8,6 +8,8 @@ from datetime import datetime
 @login_manager.user_loader
 def load_user(id):
     return User.query.get(id)
+
+# ---------------------- MODELS --------------------------
 
 
 class User(db.Model, UserMixin):
@@ -46,10 +48,6 @@ class Comment(db.Model):
         self.userId = 1
         self.text = text
 
-class CommentSchema(Schema):
-    class Meta:
-        fields = ('id', 'taskId', 'userId', 'text')
-
 
 class Task(db.Model):
     taskId = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -71,7 +69,7 @@ class Task(db.Model):
             return datetime.strptime(date, "%Y/%m/%d")
 
 
-    def __init__(self, title, status, duedate, description, assignedIds, orderId, comments):
+    def __init__(self, title, status, duedate, description, assignedIds, orderId, comments, todos):
         self.title = title
         self.status = status
         self.duedate = self.check_date(duedate)
@@ -79,14 +77,7 @@ class Task(db.Model):
         self.assignedIds = assignedIds
         self.orderId = orderId
         self.comments = comments
-
-
-class TaskSchema(Schema):
-    comments = fields.Nested(CommentSchema, many=True)
-
-    class Meta:
-        fields = ('taskId', 'title', 'status', 'timestamp', 'duedate', 'description', 'assignedIds', 'orderId', 'comments')
-
+        self.todos = todos
 
 
 class Todo(db.Model):
@@ -94,5 +85,34 @@ class Todo(db.Model):
     taskId = db.Column(db.Integer, db.ForeignKey('task.taskId'))
     userId = db.Column(db.Integer, db.ForeignKey('user.id'))
     text = db.Column(db.String(255), nullable=False)
+    status = db.Column(db.Text, default="New")
     task = db.relationship('Task',
-                           backref=db.backref('todos', lazy='dynamic'))
+                           backref=db.backref('task_todos', lazy='dynamic'))
+
+    def __init__(self, taskId, text, status):
+        self.taskId = taskId
+        self.userId = 1
+        self.text = text
+        self.status = status
+
+# --------------------- SCHEMAS ----------------------
+
+class TodoSchema(Schema):
+    class Meta:
+        fields = ("id", "taskId", "userId", "text")
+
+class CommentSchema(Schema):
+    class Meta:
+        fields = ('id', 'taskId', 'userId', 'text')
+
+class TaskSchema(Schema):
+    comments = fields.Nested(CommentSchema, many=True)
+    todos = fields.Nested(TodoSchema, many=True)
+
+    class Meta:
+        fields = ('taskId', 'title',
+                  'status', 'timestamp',
+                  'duedate', 'description',
+                  'assignedIds', 'orderId',
+                  'comments', 'todos')
+
