@@ -91,6 +91,7 @@ app.config(['$routeProvider', function($routeProvider) {
   var self = this;
   self.task = task;
   self.commentAdded = undefined;
+  self.todoAdded = undefined;
 
   self.editTask = function (id) {
     $window.location.href= '#/tasks/' + id + '/edit/';
@@ -115,7 +116,23 @@ app.config(['$routeProvider', function($routeProvider) {
   self.addComment = function (id, comment) {
     tasksService.addComment(id, comment);
     self.commentAdded = undefined;
-    $window.location.href = '#/tasks/' + id;
+    // $window.location.href = '#/tasks/' + id;
+  };
+
+  self.createTodo = function (taskId, userId, text) {
+    self.task.todos.push({
+      taskId: taskId || '',
+      userId: userId || '',
+      text: text || ''
+    });
+
+    self.todoAdded = true;
+  };
+
+  self.addTodo = function (id, todo) {
+    tasksService.addTodo(id, todo);
+    self.todoAdded = undefined;
+    // $window.location.href = '#/tasks/' + id;
   };
 }]);
 
@@ -180,7 +197,7 @@ app.config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/', routeDefinition);
   $routeProvider.when('/tasks', routeDefinition);
 }])
-.controller('TasksCtrl', ['tasks', 'tasksService', '$window', function (tasks, tasksService, $window) {
+.controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', function (tasks, tasksService, usersService, $window) {
   var self = this;
   self.tasks = tasks;
 
@@ -188,12 +205,17 @@ app.config(['$routeProvider', function($routeProvider) {
     tasksService.deleteTask(id);
   };
 
-  self.markDone = function (task) {
-    task.status = "Done";
-  };
+  // self.markDone = function (task) {
+  //   tasksService.editTask(task);
+  // };
 
   self.editTask = function (id) {
     $window.location.href= '#/tasks/' + id;
+  };
+
+  self.logoutUser = function() {
+    usersService.logoutUser();
+    $window.location.href= '#/login/';
   };
 }]);
 
@@ -237,7 +259,41 @@ app.factory('tasksService', ['$http', function($http) {
 
     addComment: function(id, comment) {
       return processAjaxPromise($http.post('/api/tasks/' + id + '/comments/', comment));
+    },
+
+    deleteComment: function(id, commentId, comment) {
+      return processAjaxPromise($http.delete('/api/tasks/' + id + '/comments/' + commentId + '/'));
+    },
+
+    addTodo: function(id, todo) {
+      return processAjaxPromise($http.post('/api/tasks/' + id + '/todos/', todo));
+    },
+
+    deleteTodo: function(id, todoId, comment) {
+      return processAjaxPromise($http.delete('/api/tasks/' + id + '/todos/' + todoId + '/'));
     }
+  };
+}]);
+
+app.config(['$routeProvider', function($routeProvider) {
+  var routeDefinition = {
+    templateUrl: 'static/users/login.html',
+    controller: 'LoginCtrl',
+    controllerAs: 'vm'
+  };
+
+  $routeProvider.when('/login/', routeDefinition);
+}])
+.controller('LoginCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
+  var self = this;
+  self.user = User();
+
+  self.loginUser = function() {
+    usersService.loginUser(self.user);
+
+    self.user = User();
+
+    $window.location.href= "#/tasks";
   };
 }]);
 
@@ -248,14 +304,14 @@ app.config(['$routeProvider', function($routeProvider) {
     controllerAs: 'vm'
   };
 
-  $routeProvider.when('/signup', routeDefinition);
+  $routeProvider.when('/signup/', routeDefinition);
 }])
 .controller('NewUserCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
   var self = this;
   self.user = User();
 
   self.addUser = function() {
-    usersService.addUser(self.user);
+    usersService.registerUser(self.user);
 
     self.user = User();
 
@@ -289,8 +345,8 @@ app.factory('User', function() {
   return function (spec) {
     spec = spec || {};
     return {
-      userId: spec.userId || '',
-      username: spec.username || '',
+      id: spec.id || '',
+      name: spec.name || '',
       password: spec.password || '',
       email: spec.email || ''
     };
@@ -320,12 +376,20 @@ app.factory('usersService', ['$http', function($http) {
       return get('/api/users/' + id);
     },
 
-    addUser: function(user) {
-      return processAjaxPromise($http.post('/api/users', user));
+    registerUser: function(user) {
+      return processAjaxPromise($http.post('/api/register/', user));
     },
 
-    deleteUser: function(user) {
-      return processAjaxPromise($http.delete('/api/users', user));
+    loginUser: function(user) {
+      return processAjaxPromise($http.post('/api/login/', user));
+    },
+
+    logoutUser: function() {
+      return processAjaxPromise($http.post('/api/logout/'));
+    },
+
+    deleteUser: function(id) {
+      return processAjaxPromise($http.delete('/api/users/' + id + '/'));
     }
   };
 }]);
@@ -350,7 +414,7 @@ app.factory('Todo', function() {
   return function (spec) {
     spec = spec || {};
     return {
-      todoId: spec.todoId || '',
+      id: spec.id || '',
       taskId: spec.taskId || '',
       userId: spec.userId || '',
       text: spec.text || ''

@@ -5,14 +5,14 @@ app.config(['$routeProvider', function($routeProvider) {
     controllerAs: 'vm'
   };
 
-  $routeProvider.when('/signup', routeDefinition);
+  $routeProvider.when('/signup/', routeDefinition);
 }])
 .controller('NewUserCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
   var self = this;
   self.user = User();
 
   self.addUser = function() {
-    usersService.addUser(self.user);
+    usersService.registerUser(self.user);
 
     self.user = User();
 

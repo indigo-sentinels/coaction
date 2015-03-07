@@ -1,6 +1,6 @@
 import base64
 from flask import Blueprint, request
-from flask.ext.login import current_user, abort, login_user, logout_user
+from flask.ext.login import current_user, abort, login_user, logout_user, login_required
 from ..models import User, UserSchema, Task, TaskSchema
 from ..extensions import db, login_manager
 from ..api_helpers import APIView, returns_json
@@ -33,6 +33,7 @@ def require_authorization():
 
 
 class UserListView(APIView):
+    @login_required
     def get(self):
         users = User.query.all()
         if users:
@@ -44,6 +45,7 @@ class UserListView(APIView):
 
 
 class UserView(APIView):
+    @login_required
     def get(self, id):
         user = User.query.get(id)
         if user:
@@ -91,17 +93,22 @@ class Login(APIView):
 
 
 class Logout(APIView):
+    @login_required
     def post(self):
         logout_user()
         return {"result": "logged out"}
 
 
 class UserTasks(APIView):
+    @login_required
     def get(self, id):
-        tasks = Task.query.filter_by(userId = id)
-        serializer = TaskSchema(many=True)
-        result = serializer.dump(tasks)
-        return {"tasks": result.data}
+        if current_user.id == id:
+            tasks = Task.query.filter_by(userId = id)
+            serializer = TaskSchema(many=True)
+            result = serializer.dump(tasks)
+            return {"tasks": result.data}
+        else:
+            return {"error":"not authorized"}
 
 
 user.add_url_rule('/users/', view_func=UserListView.as_view('users'))

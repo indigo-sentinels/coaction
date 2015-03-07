@@ -21,12 +21,20 @@ app.factory('usersService', ['$http', function($http) {
       return get('/api/users/' + id);
     },
 
-    addUser: function(user) {
-      return processAjaxPromise($http.post('/api/users', user));
+    registerUser: function(user) {
+      return processAjaxPromise($http.post('/api/register/', user));
     },
 
-    deleteUser: function(user) {
-      return processAjaxPromise($http.delete('/api/users', user));
+    loginUser: function(user) {
+      return processAjaxPromise($http.post('/api/login/', user));
+    },
+
+    logoutUser: function() {
+      return processAjaxPromise($http.post('/api/logout/'));
+    },
+
+    deleteUser: function(id) {
+      return processAjaxPromise($http.delete('/api/users/' + id + '/'));
     }
   };
 }]);
