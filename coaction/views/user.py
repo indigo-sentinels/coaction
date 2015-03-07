@@ -95,12 +95,17 @@ class Logout(APIView):
         logout_user()
         return {"result": "logged out"}
 
+class UserTasks(APIView):
+    def get(self, id):
+        tasks = Task.query.filter_by(userId = id)
+        serializer = TaskSchema(many=True)
+        result = serializer.dump(tasks)
+        return {"tasks": result.data}
+
 
 user.add_url_rule('/users/', view_func=UserListView.as_view('users'))
 user.add_url_rule('/login/', view_func=Login.as_view('login'))
 user.add_url_rule('/register/', view_func=Register.as_view('register'))
 user.add_url_rule('/logout/', view_func=Logout.as_view('logout'))
 user.add_url_rule('/users/<int:id>/', view_func=UserView.as_view('user'))
-
-
-
+user.add_url_rule('/users/<int:id>/tasks', view_func=UserTasks.as_view('usertasks'))
