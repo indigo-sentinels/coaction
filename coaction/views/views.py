@@ -140,19 +140,8 @@ class TodoView(APIView):
         return {"deleted": result.data}
 
 
-class UserView(APIView):
-    def get(self, id):
-        return {
-            "user_id": 1,
-            "username": "JohnPM",
-            "encrypted_password": "jkalfsd932ut0invlafsdga",
-            "email": "J@J.J"
-        }
-
-
 coaction.add_url_rule('/tasks/', view_func=TaskListView.as_view('tasks'))
 coaction.add_url_rule('/tasks/<int:id>/', view_func=TaskView.as_view('task'))
-coaction.add_url_rule('/users/<int:id>/', view_func=UserView.as_view('user'))
 coaction.add_url_rule('/tasks/<int:id>/comments/', view_func=CommentListView.as_view('comments'))
 coaction.add_url_rule('/tasks/<int:task>/comments/<int:comment>/', view_func=CommentView.as_view('comment'))
 coaction.add_url_rule('/tasks/<int:task>/todos/', view_func=TodoListView.as_view('todos'))
