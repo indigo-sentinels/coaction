@@ -1,7 +1,7 @@
 import base64
 from flask import Blueprint, request
 from flask.ext.login import current_user, abort, login_user, logout_user
-from ..models import User
+from ..models import User, UserSchema
 from ..extensions import db, login_manager
 from ..api_helpers import APIView, returns_json
 from ..forms import RegistrationForm, LoginForm
@@ -34,13 +34,14 @@ def require_authorization():
 
 
 class UserView(APIView):
-    def get(self, id):
-        return {
-            "user_id": 1,
-            "username": "JohnPM",
-            "encrypted_password": "jkalfsd932ut0invlafsdga",
-            "email": "J@J.J"
-        }
+    def get(self):
+        users = User.query.all()
+        if users:
+            serializer = UserSchema(many=True)
+            result = serializer.dump(users)
+            return {"users": result.data}
+        else:
+            return {"error": "no users!"}
 
 
 class Register(APIView):
@@ -84,7 +85,7 @@ class Logout(APIView):
         return {"result": "logged out"}
 
 
-user.add_url_rule('/users/<int:id>/', view_func=UserView.as_view('user'))
+user.add_url_rule('/users/', view_func=UserView.as_view('user'))
 user.add_url_rule('/login/', view_func=Login.as_view('login'))
 user.add_url_rule('/register/', view_func=Register.as_view('register'))
 user.add_url_rule('/logout/', view_func=Logout.as_view('logout'))

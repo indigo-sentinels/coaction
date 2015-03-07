@@ -97,13 +97,20 @@ class Todo(db.Model):
 
 # --------------------- SCHEMAS ----------------------
 
+class UserSchema(Schema):
+    class Meta:
+        fields = ("id", "name", "email", "encryptedPassword")
+
+
 class TodoSchema(Schema):
     class Meta:
         fields = ("id", "taskId", "userId", "text")
 
+
 class CommentSchema(Schema):
     class Meta:
         fields = ('id', 'taskId', 'userId', 'text')
+
 
 class TaskSchema(Schema):
     comments = fields.Nested(CommentSchema, many=True)
@@ -115,4 +122,5 @@ class TaskSchema(Schema):
                   'duedate', 'description',
                   'assignedIds', 'orderId',
                   'comments', 'todos')
+
 
