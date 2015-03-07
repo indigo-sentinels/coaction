@@ -20,7 +20,6 @@ def authorize_user(request):
     if authorization:
         email = authorization['username']
         password = authorization['password']
-
         user = User.query.filter_by(email=email).first()
         if user.check_password(password):
             return user
