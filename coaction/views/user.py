@@ -1,7 +1,7 @@
 import base64
 from flask import Blueprint, request
 from flask.ext.login import current_user, abort, login_user, logout_user
-from ..models import User, UserSchema
+from ..models import User, UserSchema,
 from ..extensions import db, login_manager
 from ..api_helpers import APIView, returns_json
 from ..forms import RegistrationForm, LoginForm
@@ -94,6 +94,7 @@ class Logout(APIView):
     def post(self):
         logout_user()
         return {"result": "logged out"}
+
 
 class UserTasks(APIView):
     def get(self, id):
