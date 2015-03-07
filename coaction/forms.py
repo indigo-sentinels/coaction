@@ -16,3 +16,9 @@ class CommentForm(Form):
     taskId = IntegerField("taskId")
     text = StringField("text", validators=[DataRequired()])
 
+class TodoForm(Form):
+    taskId = IntegerField("taskId")
+    text = StringField("text", validators=[DataRequired()])
+    status = StringField("status", default="New")
+
+
