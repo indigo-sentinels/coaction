@@ -1,6 +1,6 @@
 import base64
 from flask import Blueprint, request
-from flask.ext.login import current_user, abort, login_user, logout_user
+from flask.ext.login import current_user, abort, login_user, logout_user,
 from ..models import User, UserSchema, Task, TaskSchema
 from ..extensions import db, login_manager
 from ..api_helpers import APIView, returns_json
