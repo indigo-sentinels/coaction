@@ -1,7 +1,46 @@
-<h1>Signup</h1>
-<form ng-submit="vm.addUser()">
-  <input ng-model="vm.user.email" required placeholder="Email">
-  <input ng-model="vm.user.name" required placeholder="Username">
-  <input ng-model="vm.user.password" required placeholder="Password">
-  <button type="submit">Signup</button>
-</form>
+<div class="navbar-main">
+
+  <div class="logo">Wait<span class="underline-logo">list</span></div>
+
+  <ul class="navbar-items">
+    <li class="navbar__login">
+      <p>Login</p>
+
+      <div class="navbar-list__login">
+        <input type="text" placeholder="Username">
+        <input type="text" placeholder="Password">
+        <button class="login-btn" type="submit">Login</button>
+      </div>
+    </li>
+
+    <li class="navbar__signup">Signup</li>
+  </ul>
+
+
+</div>
+
+<div class="section__main">
+
+  <div class="section-title__main">
+    <p class="title-top">List it Now.</p>
+    <p class="title-bottom">Do it <span class="underline">Later</span>.</p>
+  </div>
+
+</div>
+
+<div class="section__modal">
+  <div class="section-bkg__modal"></div>
+
+  <form ng-submit="vm.addUser()" class="signup-form">
+    <div class="close-icon__signup">x</div>
+    <div class="form-title__primary">Signup to Build Lists!</div>
+
+    <div class="form-inputs__primary">
+      <input ng-model="vm.user.email" required placeholder="Email">
+      <input ng-model="vm.user.name" required placeholder="Username">
+      <input ng-model="vm.user.password" required placeholder="Password">
+    </div>
+
+    <button type="submit" class="signup-btn">Get Started</button>
+  </form>
+</div>
