@@ -8,6 +8,7 @@ from ..forms import RegistrationForm, LoginForm
 
 user = Blueprint("user", __name__, static_folder="./static")
 
+
 @user.app_errorhandler(401)
 @returns_json
 def unauthorized(request):
@@ -33,7 +34,7 @@ def require_authorization():
 
 
 class UserListView(APIView):
-    @login_required
+    # @login_required
     def get(self):
         users = User.query.all()
         if users:
@@ -45,7 +46,7 @@ class UserListView(APIView):
 
 
 class UserView(APIView):
-    @login_required
+    # @login_required
     def get(self, id):
         user = User.query.get(id)
         if user:
@@ -62,13 +63,18 @@ class Register(APIView):
         data = request.get_json()
         form = RegistrationForm(data=data, formdata=None, csrf_enabled=False)
         if form.validate_on_submit():
+            print("validate")
             user = User.query.filter_by(email=form.email.data).first()
             if user:
                 return {"error": "A user with that email address already exists."}
             else:
+                print("else")
                 user = User(name=form.name.data,
                             email=form.email.data,
                             password=form.password.data)
+                print(user)
+                print(user.password)
+                print(user.encryptedPassword)
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
@@ -93,14 +99,14 @@ class Login(APIView):
 
 
 class Logout(APIView):
-    @login_required
+    # @login_required
     def post(self):
         logout_user()
         return {"result": "logged out"}
 
 
 class UserTasks(APIView):
-    @login_required
+    # @login_required
     def get(self, id):
         if current_user.id == id:
             tasks = Task.query.filter_by(userId = id)
