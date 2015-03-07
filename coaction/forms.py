@@ -12,6 +12,7 @@ class TaskForm(Form):
     assignedIds = IntegerField("assignedIds")
     orderId = IntegerField('orderId')
     comments = StringField("comment", default=None)
+    todos = StringField("todo", default=None)
 
 
 class CommentForm(Form):
@@ -36,4 +37,3 @@ class RegistrationForm(Form):
 class LoginForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-
