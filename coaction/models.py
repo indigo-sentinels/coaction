@@ -1,5 +1,5 @@
 from .extensions import db, login_manager, bcrypt
-from flask.ext.login import UserMixin
+from flask.ext.login import UserMixin, current_user
 from marshmallow import Schema, fields
 from sqlalchemy import func
 from datetime import datetime
@@ -45,7 +45,7 @@ class Comment(db.Model):
 
     def __init__(self, taskId, text):
         self.taskId = taskId
-        self.userId = current_user.id
+        self.userId = 1
         self.text = text
 
 
@@ -78,7 +78,7 @@ class Task(db.Model):
         self.orderId = orderId
         self.comments = comments
         self.todos = todos
-        self.userId = current_user.id
+        self.userId = 1
 
 
 class Todo(db.Model):
@@ -92,7 +92,7 @@ class Todo(db.Model):
 
     def __init__(self, taskId, text, status):
         self.taskId = taskId
-        self.userId = current_user.id
+        self.userId = 1
         self.text = text
         self.status = status
 
