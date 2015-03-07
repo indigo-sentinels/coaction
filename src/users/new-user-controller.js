@@ -5,7 +5,7 @@ app.config(['$routeProvider', function($routeProvider) {
     controllerAs: 'vm'
   };
 
-  $routeProvider.when('/signup', routeDefinition);
+  $routeProvider.when('/signup/', routeDefinition);
 }])
 .controller('NewUserCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
   var self = this;

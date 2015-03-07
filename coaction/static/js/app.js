@@ -13,97 +13,6 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.config(['$routeProvider', function($routeProvider) {
   var routeDefinition = {
-    templateUrl: 'static/users/new-user.html',
-    controller: 'NewUserCtrl',
-    controllerAs: 'vm'
-  };
-
-  $routeProvider.when('/signup', routeDefinition);
-}])
-.controller('NewUserCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
-  var self = this;
-  self.user = User();
-
-  self.addUser = function() {
-    usersService.registerUser(self.user);
-
-    self.user = User();
-
-    $window.location.href= "#/tasks";
-  };
-}]);
-
-app.config(['$routeProvider', function($routeProvider) {
-  var routeDefinition = {
-    templateUrl: 'static/users/user.html',
-    controller: 'UserCtrl',
-    controllerAs: 'vm',
-    resolve: {
-      user: ['usersService', '$route', function (usersService, $route) {
-        var routeParams = $route.current.params;
-        var id = routeParams.id;
-        console.log(id);
-        return usersService.viewUser(id);
-      }]
-    }
-  };
-
-  $routeProvider.when('/users/:id', routeDefinition);
-}])
-.controller('UserCtrl', ['user', function (user) {
-  var self = this;
-  self.user = user;
-}]);
-
-app.factory('User', function() {
-  return function (spec) {
-    spec = spec || {};
-    return {
-      id: spec.id || '',
-      name: spec.name || '',
-      password: spec.password || '',
-      email: spec.email || ''
-    };
-  };
-});
-
-app.factory('usersService', ['$http', function($http) {
-  function get(url) {
-    return processAjaxPromise($http.get(url));
-  }
-
-  function processAjaxPromise(p) {
-    return p.then(function (result) {
-      return result.data;
-    })
-    .catch(function (error) {
-      $log.log(error);
-    });
-  }
-
-  return {
-    list: function () {
-      return get('/api/users');
-    },
-
-    viewUser: function (id) {
-      return get('/api/users/' + id);
-    },
-
-    registerUser: function(user) {
-      return processAjaxPromise($http.post('/register/', user));
-    },
-
-    deleteUser: function(id) {
-      return processAjaxPromise($http.delete('/api/users' + id + '/'));
-    }
-
-
-  };
-}]);
-
-app.config(['$routeProvider', function($routeProvider) {
-  var routeDefinition = {
     templateUrl: 'static/tasks/task-input-view.html',
     controller: 'EditTaskCtrl',
     controllerAs: 'vm',
@@ -357,6 +266,121 @@ app.factory('tasksService', ['$http', function($http) {
 
     deleteTodo: function(id, todoId, comment) {
       return processAjaxPromise($http.delete('/api/tasks/' + id + '/todos/' + todoId + '/'));
+    }
+  };
+}]);
+
+app.config(['$routeProvider', function($routeProvider) {
+  var routeDefinition = {
+    templateUrl: 'static/users/login.html',
+    controller: 'LoginCtrl',
+    controllerAs: 'vm'
+  };
+
+  $routeProvider.when('/login/', routeDefinition);
+}])
+.controller('LoginCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
+  var self = this;
+  self.user = User();
+
+  self.loginUser = function() {
+    usersService.loginUser(self.user);
+
+    self.user = User();
+
+    $window.location.href= "#/tasks";
+  };
+}]);
+
+app.config(['$routeProvider', function($routeProvider) {
+  var routeDefinition = {
+    templateUrl: 'static/users/new-user.html',
+    controller: 'NewUserCtrl',
+    controllerAs: 'vm'
+  };
+
+  $routeProvider.when('/signup/', routeDefinition);
+}])
+.controller('NewUserCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
+  var self = this;
+  self.user = User();
+
+  self.addUser = function() {
+    usersService.registerUser(self.user);
+
+    self.user = User();
+
+    $window.location.href= "#/tasks";
+  };
+}]);
+
+app.config(['$routeProvider', function($routeProvider) {
+  var routeDefinition = {
+    templateUrl: 'static/users/user.html',
+    controller: 'UserCtrl',
+    controllerAs: 'vm',
+    resolve: {
+      user: ['usersService', '$route', function (usersService, $route) {
+        var routeParams = $route.current.params;
+        var id = routeParams.id;
+        console.log(id);
+        return usersService.viewUser(id);
+      }]
+    }
+  };
+
+  $routeProvider.when('/users/:id', routeDefinition);
+}])
+.controller('UserCtrl', ['user', function (user) {
+  var self = this;
+  self.user = user;
+}]);
+
+app.factory('User', function() {
+  return function (spec) {
+    spec = spec || {};
+    return {
+      id: spec.id || '',
+      name: spec.name || '',
+      password: spec.password || '',
+      email: spec.email || ''
+    };
+  };
+});
+
+app.factory('usersService', ['$http', function($http) {
+  function get(url) {
+    return processAjaxPromise($http.get(url));
+  }
+
+  function processAjaxPromise(p) {
+    return p.then(function (result) {
+      return result.data;
+    })
+    .catch(function (error) {
+      $log.log(error);
+    });
+  }
+
+  return {
+    list: function () {
+      return get('/api/users');
+    },
+
+    viewUser: function (id) {
+      return get('/api/users/' + id);
+    },
+
+    registerUser: function(user) {
+      return processAjaxPromise($http.post('/api/register/', user));
+    },
+
+    loginUser: function(user) {
+      return processAjaxPromise($http.post('/api/login/', user));
+    },
+
+    deleteUser: function(id) {
+      return processAjaxPromise($http.delete('/api/users/' + id + '/'));
     }
   };
 }]);
