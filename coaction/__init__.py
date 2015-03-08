@@ -1,7 +1,7 @@
 from flask import Flask
 
 from . import models
-from .extensions import db, migrate, config, login_manager, bcrypt
+from .extensions import db, migrate, config, login_manager
 from .views.views import coaction
 from .views.home import home
 from .views.user import user
