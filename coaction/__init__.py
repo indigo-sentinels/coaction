@@ -1,13 +1,13 @@
 from flask import Flask
 
 from . import models
-from .extensions import db, migrate, config, login_manager, bcrypt
+from .extensions import db, migrate, config, login_manager
 from .views.views import coaction
 from .views.home import home
 from .views.user import user
 
 
-SQLALCHEMY_DATABASE_URI = "sqlite:////tmp/coaction.db"
+SQLALCHEMY_DATABASE_URI = "postgres://localhost/coaction"
 DEBUG = True
 SECRET_KEY = 'development-key'
 
@@ -22,7 +22,6 @@ def create_app():
     config.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
-    bcrypt.init_app(app)
     login_manager.init_app(app)
 
     return app
