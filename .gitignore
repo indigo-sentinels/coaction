@@ -50,4 +50,4 @@ env
 .python-version
 
 # Migrations
-/coaction/migrations/*
+migrations/*
