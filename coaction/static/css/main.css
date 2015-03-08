@@ -515,9 +515,9 @@ input {
 
 .list {
   box-sizing: border-box;
-  width: 65%;
+  width: 350px;
   background-color: #E3E3E3;
-  border-radius: 15px;
+  border-radius: 8px;
   position: absolute;
   top: 11%;
   left: 50%;
@@ -545,7 +545,8 @@ input {
   padding-left: 1em;
   padding-top: 0.1em;
   padding-bottom: 0.1em;
-  margin-bottom: 1em; }
+  margin-bottom: 1em;
+  border-radius: 4px; }
 
 .task-btn {
   margin-bottom: 1em;
