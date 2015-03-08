@@ -194,12 +194,16 @@ app.config(['$routeProvider', function($routeProvider) {
     }
   };
 
-  $routeProvider.when('/', routeDefinition);
+  // $routeProvider.when('/', routeDefinition);
   $routeProvider.when('/tasks', routeDefinition);
 }])
 .controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', function (tasks, tasksService, usersService, $window) {
   var self = this;
   self.tasks = tasks;
+
+  self.goToNewTask = function () {
+    $window.location.href = '#/tasks/new/';
+  };
 
   self.deleteTask = function (id) {
     tasksService.deleteTask(id);
