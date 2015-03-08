@@ -63,18 +63,13 @@ class Register(APIView):
         data = request.get_json()
         form = RegistrationForm(data=data, formdata=None, csrf_enabled=False)
         if form.validate_on_submit():
-            print("validate")
             user = User.query.filter_by(email=form.email.data).first()
             if user:
                 return {"error": "A user with that email address already exists."}
             else:
-                print("else")
                 user = User(name=form.name.data,
                             email=form.email.data,
                             password=form.password.data)
-                print(user)
-                print(user.password)
-                print(user.encryptedPassword)
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
@@ -114,7 +109,7 @@ class UserTasks(APIView):
             result = serializer.dump(tasks)
             return {"tasks": result.data}
         else:
-            return {"error":"not authorized"}
+            return {"error": "not authorized"}
 
 
 user.add_url_rule('/users/', view_func=UserListView.as_view('users'))
