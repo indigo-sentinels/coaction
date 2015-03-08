@@ -15,7 +15,7 @@ app.factory('tasksService', ['$http', function($http) {
 
   return {
     list: function () {
-      return get('/api/tasks').then(function (result) {
+      return get('/api/tasks/').then(function (result) {
         return result.tasks;
       });
     },
