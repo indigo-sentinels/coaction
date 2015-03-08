@@ -1,5 +1,3 @@
-<button ng-click="vm.logoutUser()">Logout</button>
-
 <a ng-href="#/tasks/new"><button>+ Add New Task</button></a>
 <div ng-repeat="task in vm.tasks | orderBy: 'timestamp': reverse=true" ng-click="vm.editTask(task.taskId)">
   <h1>{{task.title}}</h1>
@@ -7,4 +5,28 @@
   <p>{{task.status}}</p>
   <p>{{task.dueDate}}</p>
   <!-- <button ng-click="vm.markDone(task)">Done</button> -->
+</div>
+
+<div class="navbar-main">
+  <div class="logo">Wait<span class="underline-logo">list</span></div>
+
+  <ul class="navbar-items">
+    <a ng-click="vm.logoutUser()"><li class="navbar__signup">Logout</li></a>
+  </ul>
+</div>
+
+<div class="section__app">
+
+  <!-- <div class="list">
+
+    <p class="list-title">Ideas</p>
+
+    <div class="list-item">
+      <p class="list-item__psuedo"></p>
+      <textarea class="list-item-textarea"></textarea>
+    </div>
+
+  </div> -->
+
+
 </div>
