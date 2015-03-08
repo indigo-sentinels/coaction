@@ -111,6 +111,17 @@ class UserTasks(APIView):
         else:
             return {"error": "not authorized"}
 
+class UserAssignedTasks(APIView):
+    @login_required
+    def get(self, id):
+        if current_user.id == id:
+            tasks = Task.query.filter_by(assignedIds = id)
+            serializer = TaskSchema(many=True)
+            result = serializer.dump(tasks)
+            return {"tasks": result.data}
+        else:
+            return {"error": "not authorized"}
+
 
 user.add_url_rule('/users/', view_func=UserListView.as_view('users'))
 user.add_url_rule('/login/', view_func=Login.as_view('login'))
@@ -118,3 +129,4 @@ user.add_url_rule('/register/', view_func=Register.as_view('register'))
 user.add_url_rule('/logout/', view_func=Logout.as_view('logout'))
 user.add_url_rule('/users/<int:id>/', view_func=UserView.as_view('user'))
 user.add_url_rule('/users/<int:id>/tasks', view_func=UserTasks.as_view('usertasks'))
+user.add_url_rule('/users/<int:id>/assignedtasks', view_func=UserAssignedTasks.as_view('userassignedtasks'))
