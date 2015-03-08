@@ -13,6 +13,7 @@ class TaskForm(Form):
     orderId = IntegerField('orderId')
     comments = StringField("comment", default=None)
     todos = StringField("todo", default=None)
+    listId = IntegerField('listId')
 
 
 class CommentForm(Form):

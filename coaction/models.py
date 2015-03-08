@@ -61,6 +61,7 @@ class Task(db.Model):
     description = db.Column(db.String(255))
     orderId = db.Column(db.Integer)
     assignedIds = db.Column(db.Integer)
+    listId = db.Column(db.Integer)
     user = db.relationship('User',
                            backref=db.backref('tasks', lazy='dynamic'))
 
@@ -71,7 +72,7 @@ class Task(db.Model):
             return datetime.strptime(date, "%Y/%m/%d")
 
 
-    def __init__(self, title, status, duedate, description, assignedIds, orderId, comments, todos):
+    def __init__(self, title, status, duedate, description, assignedIds, orderId, comments, todos, listId):
         self.title = title
         self.status = status
         self.duedate = self.check_date(duedate)
@@ -81,6 +82,7 @@ class Task(db.Model):
         self.comments = comments
         self.todos = todos
         self.userId = 1
+        self.listId = listId
 
 
 class Todo(db.Model):
@@ -125,4 +127,4 @@ class TaskSchema(Schema):
                   'duedate', 'description',
                   'assignedIds', 'orderId',
                   'comments', 'todos',
-                  'userId')
+                  'userId', 'listId')
