@@ -133,7 +133,7 @@ input {
   text-transform: uppercase;
   position: absolute;
   top: 50%;
-  right: 0%;
+  right: 7%;
   transform: translate(0, -20%);
 }
 
@@ -150,11 +150,11 @@ input {
 
 .navbar-items li {
   float: left;
-  margin-right: 1.25em;
 }
 
 .navbar__login {
   color: white;
+  margin-right: 2.25em;
 }
 
 .navbar-items__left li {
@@ -301,7 +301,7 @@ input {
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 1;
-  border-radius: 10px;
+  border-radius: 4px;
   z-index: 1060;
   padding: 1.5em;
   text-align: center;
@@ -316,7 +316,7 @@ input {
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 1;
-  border-radius: 10px;
+  border-radius: 4px;
   z-index: 1060;
   padding: 1.5em;
   text-align: center;

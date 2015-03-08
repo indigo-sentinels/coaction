@@ -268,7 +268,7 @@ input {
   text-transform: uppercase;
   position: absolute;
   top: 50%;
-  right: 0%;
+  right: 7%;
   -webkit-transform: translate(0, -20%);
   transform: translate(0, -20%); }
 
@@ -284,11 +284,11 @@ input {
   transform: translate(0, -20%); }
 
 .navbar-items li {
-  float: left;
-  margin-right: 1.25em; }
+  float: left; }
 
 .navbar__login {
-  color: white; }
+  color: white;
+  margin-right: 2.25em; }
 
 .navbar-items__left li {
   float: left;
@@ -419,7 +419,7 @@ input {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   opacity: 1;
-  border-radius: 10px;
+  border-radius: 4px;
   z-index: 1060;
   padding: 1.5em;
   text-align: center; }
@@ -434,7 +434,7 @@ input {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   opacity: 1;
-  border-radius: 10px;
+  border-radius: 4px;
   z-index: 1060;
   padding: 1.5em;
   text-align: center; }
@@ -490,6 +490,18 @@ input {
   opacity: .2;
   z-index: 0; }
 
+.homepage-logo {
+  top: 50%;
+  left: 11.5%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  line-height: 1em;
+  font-family: 'Lato', sans-serif;
+  font-weight: 100;
+  font-size: 1.95em;
+  text-transform: uppercase;
+  position: absolute; }
+
 .logo {
   top: 50%;
   left: 50%;
@@ -514,7 +526,8 @@ input {
   color: #333;
   transition: height .1s;
   visibility: visible;
-  padding: .5em 1em; }
+  padding: .5em 1em;
+  overflow: auto; }
 
 .list-title {
   max-width: 255px;
