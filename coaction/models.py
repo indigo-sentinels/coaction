@@ -1,8 +1,10 @@
-from .extensions import db, login_manager, bcrypt
+from .extensions import db, login_manager
 from flask.ext.login import UserMixin, current_user
 from marshmallow import Schema, fields
 from sqlalchemy import func
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 
 @login_manager.user_loader
@@ -24,12 +26,12 @@ class User(db.Model, UserMixin):
 
     def set_password(self, password):
         self._password = password
-        self.encryptedPassword = bcrypt.generate_password_hash(password)
+        self.encryptedPassword = generate_password_hash(password)
 
     password = property(get_password, set_password)
 
     def check_password(self, password):
-        return bcrypt.check_password_hash(self.encryptedPassword, password)
+        return check_password_hash(self.encryptedPassword, password)
 
     def __repr__(self):
         return "<User {}>".format(self.email)
