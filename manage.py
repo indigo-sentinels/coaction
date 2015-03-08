@@ -35,52 +35,60 @@ def createdb():
 @manager.command
 def seed():
     """Seed first user with tasks"""
+    user_seed_data = [{
+                       'name': "Tom Tester",
+                       'email': "tom@tester.com",
+                       'password': "password"
+                       }]
     task_seed_data = [{
-                  'title':"Go Shopping",
-                  'status': "New",
-                #   'userId': 1,
-                  'duedate': "2015/3/15",
-                  'timestamp': "2015/3/6",
-                  'description': "Do some shopping",
-                  'orderId': "1",
-                  'assignedIds': '1',
-                  'comments': "comment",
-                  'todos': "todo1"
-                  },
-                  {
-                  'title':"Do something else",
-                   'status': "New",
-                #    'userId': 1,
-                   'timestamp': "2015/3/6",
-                   'duedate': "2015/4/25",
-                   'description': "A new thing to do",
-                   'orderId': "2",
-                   'assignedIds': '2',
-                   'comments': "comment2",
-                   'todos': "todo2"
-                   }]
+                       'title':"Go Shopping",
+                       'status': "New",
+                       'userId': 1,
+                       'duedate': "2015/3/15",
+                       'timestamp': "2015/3/6",
+                       'description': "Do some shopping",
+                       'orderId': "1",
+                       'assignedIds': '1',
+                       'comments': "comment",
+                       'todos': "todo1",
+                       'listId': '1'
+                       },
+                      {
+                      'title':"Do something else",
+                       'status': "New",
+                       'userId': 1,
+                       'timestamp': "2015/3/6",
+                       'duedate': "2015/4/25",
+                       'description': "A new thing to do",
+                       'orderId': "2",
+                       'assignedIds': '2',
+                       'comments': "comment2",
+                       'todos': "todo2",
+                       'listId': '1'
+                       }]
     comment_seed_data = [{
-                    'text': "what a cool task",
-                    'taskId': "1"
-                    # 'userId': "1"
-                    }]
+                          'text': "what a cool task",
+                          'userId': "1",
+                          'taskId': "1"
+                          }]
 
     for seed in task_seed_data:
         task=Task(title=seed['title'],
                status=seed['status'],
-            #    userId=seed['userId'],
+               userId=seed['userId'],
                duedate=seed['duedate'],
                description=seed['description'],
                orderId=seed['orderId'],
                assignedIds=seed['assignedIds'],
                comments=seed['comments'],
-               todos=seed['todos'])
+               todos=seed['todos'],
+               listId=seed['listId'])
 
         db.session.add(task)
     for seed in comment_seed_data:
         comment=Comment(text=seed['text'],
-                        taskId=seed['taskId']
-                        # userId=seed['userId']
+                        taskId=seed['taskId'],
+                        userId=seed['userId']
                         )
         db.session.add(comment)
     db.session.commit()

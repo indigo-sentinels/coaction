@@ -61,9 +61,12 @@ class Task(db.Model):
     description = db.Column(db.String(255))
     orderId = db.Column(db.Integer)
     assignedIds = db.Column(db.Integer)
-    listId = db.Column(db.Integer)
+    listId = db.Column(db.Integer, db.ForeignKey('tasklist.id'))
     user = db.relationship('User',
                            backref=db.backref('tasks', lazy='dynamic'))
+    tasklist = db.relationship('Tasklist',
+                                backref=db.backref('tasks', lazy='dynamic'))
+
 
     def check_date(self, date):
         if date == None:
@@ -100,6 +103,19 @@ class Todo(db.Model):
         self.text = text
         self.status = status
 
+class Tasklist(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
+    orderId = db.Column(db.Integer)
+    title = db.Column(db.String(255))
+
+    def __init__(self, orderId, title):
+        self.userId = current_user.id
+        # self.tasks = tasks
+        self.orderId = orderId
+        self.title = title
+
+
 # --------------------- SCHEMAS ----------------------
 
 class UserSchema(Schema):
@@ -128,3 +144,10 @@ class TaskSchema(Schema):
                   'assignedIds', 'orderId',
                   'comments', 'todos',
                   'userId', 'listId')
+
+class TaskListSchema(Schema):
+    tasks = fields.Nested(TaskSchema, many=True)
+
+    class Meta:
+        fields = ('id', 'userId', 'tasks',
+                  'orderId', 'title')

@@ -2,8 +2,8 @@ import json
 from flask import Blueprint, flash, jsonify, request
 from coaction.api_helpers import returns_json, APIView, api_form
 from coaction.extensions import db
-from coaction.models import TaskSchema, Task, Comment, CommentSchema, TodoSchema, Todo
-from coaction.forms import TaskForm, CommentForm, TodoForm
+from coaction.models import TaskSchema, Task, Comment, CommentSchema, TodoSchema, Todo, Tasklist, TaskListSchema
+from coaction.forms import TaskForm, CommentForm, TodoForm, TaskListForm
 from flask.ext.login import login_required
 from datetime import datetime
 import json
@@ -158,6 +158,56 @@ class TodoView(APIView):
         result = serializer.dump(todo)
         return {"deleted": result.data}
 
+class ManyTaskListsView(APIView):
+    @login_required
+    def get(self):
+        tasklists = Tasklist.query.all()
+        serializer = TaskListSchema(many=True)
+        result = serializer.dump(tasklists)
+        return {"tasklists": result.data}
+
+    @login_required
+    def post(self):
+        data = request.get_json(force=True)
+        form = TaskListForm(data=data, formdata=None, csrf_enabled=False)
+        if form.validate():
+            tasklist = Tasklist(**form.data)
+            if Tasklist.query.get(1):
+                _tasklist = Tasklist.query.order_by(-(Tasklist.id)).first()
+                x = _tasklist.id
+                tasklist.orderId = x+1
+            else:
+                tasklist.orderId = 1
+            db.session.add(tasklist)
+            db.session.commit()
+            result = TaskListSchema().dump(tasklist)
+            return result.data
+        else:
+            return {"form": "not validated"}
+
+
+class SingleTaskListView(APIView):
+    @login_required
+    def put(self, id):
+        data = request.get_json(force=True)
+        tasklist = Tasklist.query.get_or_404(id)
+        for key, value in data.items():
+            setattr(tasklist, key, value)
+        db.session.add(tasklist)
+        db.session.commit()
+        result = TaskListSchema().dump(tasklist)
+        return result.data
+
+    @login_required
+    def delete(self, id):
+        tasklist = Tasklist.query.get_or_404(id)
+        db.session.delete(tasklist)
+        db.session.commit()
+        serializer = TaskSchema()
+        result = serializer.dump(tasklist)
+        return {"deleted": result.data}
+
+
 
 coaction.add_url_rule('/tasks/', view_func=TaskListView.as_view('tasks'))
 coaction.add_url_rule('/tasks/<int:id>/', view_func=TaskView.as_view('task'))
@@ -165,3 +215,5 @@ coaction.add_url_rule('/tasks/<int:id>/comments/', view_func=CommentListView.as_
 coaction.add_url_rule('/tasks/<int:task>/comments/<int:comment>/', view_func=CommentView.as_view('comment'))
 coaction.add_url_rule('/tasks/<int:task>/todos/', view_func=TodoListView.as_view('todos'))
 coaction.add_url_rule('/tasks/<int:task>/todos/<int:todo>', view_func=TodoView.as_view('todo'))
+coaction.add_url_rule('/list/', view_func=ManyTaskListsView.as_view('tasklists'))
+coaction.add_url_rule('/list/<int:id>/', view_func=SingleTaskListView.as_view('tasklist'))

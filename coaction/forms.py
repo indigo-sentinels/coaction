@@ -15,6 +15,10 @@ class TaskForm(Form):
     todos = StringField("todo", default=None)
     listId = IntegerField('listId')
 
+class TaskListForm(Form):
+    title = StringField('title')
+    orderId = IntegerField('orderId')
+
 
 class CommentForm(Form):
     taskId = IntegerField("taskId")
