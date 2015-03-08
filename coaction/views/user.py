@@ -94,14 +94,14 @@ class Login(APIView):
 
 
 class Logout(APIView):
-    # @login_required
+    @login_required
     def post(self):
         logout_user()
         return {"result": "logged out"}
 
 
 class UserTasks(APIView):
-    # @login_required
+    @login_required
     def get(self, id):
         if current_user.id == id:
             tasks = Task.query.filter_by(userId = id)
