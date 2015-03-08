@@ -32,6 +32,12 @@ class TaskListView(APIView):
         if form.validate():
             task = Task(**form.data)
             task.timestamp = datetime.today()
+            if Task.query.get(1):
+                _task = Task.query.order_by(-(Task.taskId)).first()
+                x = _task.taskId
+                task.orderId = x+1
+            else:
+                task.orderId = 1
             db.session.add(task)
             db.session.commit()
             result = TaskSchema().dump(task)
