@@ -18,6 +18,7 @@ app.config(['$routeProvider', function($routeProvider) {
   var self = this;
   self.task = task;
   self.commentDeleted = undefined;
+  self.todoDeleted = undefined;
 
   self.deleteTask = function (id) {
     tasksService.deleteTask(id);
@@ -32,6 +33,12 @@ app.config(['$routeProvider', function($routeProvider) {
     tasksService.deleteComment(taskId, commentId);
     self.commentDeleted = true;
   };
+
+    self.deleteTodo = function (taskId, todo) {
+      var todoId = todo.id;
+      tasksService.deleteTodo(taskId, todoId);
+      self.todoDeleted = true;
+    };
 
   self.addTask = function() {
     console.log(self.task);

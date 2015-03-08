@@ -12,6 +12,11 @@
     <option value="done">Done</option>
   </select>
 
+  <div ng-if="!vm.todoDeleted" ng-repeat="todo in vm.task.todos">
+    <input ng-model="todo.text">
+    <button type="button" ng-click="vm.deleteTodo(vm.task.taskId, todo)">Delete To Do</button>
+  </div>
+
   <div ng-if="!vm.commentDeleted" ng-repeat="comment in vm.task.comments">
     <input ng-model="comment.text">
     <button type="button" ng-click="vm.deleteComment(vm.task.taskId, comment)">Delete Comment</button>
