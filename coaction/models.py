@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
-    encryptedPassword = db.Column(db.String(60))
+    encryptedPassword = db.Column(db.String(100))
 
 
     def get_password(self):
