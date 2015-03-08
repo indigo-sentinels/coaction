@@ -22,7 +22,6 @@ MarkupSafe==0.23
 marshmallow==1.2.2
 ordereddict==1.1
 plotly==1.6.9
-psycopg2==2.6
 py==1.4.26
 pycparser==2.10
 pytest==2.6.4
