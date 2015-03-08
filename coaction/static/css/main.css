@@ -527,6 +527,16 @@ input {
   width: 222px;
   height: auto; }
 
+.task {
+  background: white;
+  padding-left: 1em;
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
+  margin-bottom: 1em; }
+
+.task-btn {
+  margin-bottom: 1em; }
+
 .list-item-textarea {
   resize: none;
   width: 100%;

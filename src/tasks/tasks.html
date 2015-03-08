@@ -8,9 +8,9 @@
   </div>
 
   <div class="list">
-    <a ng-href="#/tasks/new"><button>+ Add New Task</button></a>
+    <a ng-href="#/tasks/new"><button class="task-btn">+ Add New Task</button></a>
 
-    <div ng-repeat="task in vm.tasks | orderBy: 'timestamp': reverse=true" ng-click="vm.editTask(task.taskId)">
+    <div class="task" ng-repeat="task in vm.tasks | orderBy: 'timestamp': reverse=true" ng-click="vm.editTask(task.taskId)">
       <h1>{{task.title}}</h1>
       <p>{{task.description}}</p>
       <p>{{task.status}}</p>
