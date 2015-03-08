@@ -34,7 +34,7 @@ def require_authorization():
 
 
 class UserListView(APIView):
-    # @login_required
+    @login_required
     def get(self):
         users = User.query.all()
         if users:
@@ -46,7 +46,7 @@ class UserListView(APIView):
 
 
 class UserView(APIView):
-    # @login_required
+    @login_required
     def get(self, id):
         user = User.query.get(id)
         if user:
