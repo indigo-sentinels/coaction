@@ -7,6 +7,9 @@ app.config(['$routeProvider', function($routeProvider) {
       tasks: ['tasksService', function (tasksService) {
         return tasksService.list();
       }]
+      // user: ['tasksService', function (usersService) {
+      //   return usersService.viewUser()
+      // }]
     }
   };
 
@@ -15,6 +18,9 @@ app.config(['$routeProvider', function($routeProvider) {
 }])
 .controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', function (tasks, tasksService, usersService, $window) {
   var self = this;
+  self.name;
+  self.user;
+
   self.tasks = tasks;
 
   self.goToNewTask = function () {
@@ -23,6 +29,16 @@ app.config(['$routeProvider', function($routeProvider) {
 
   self.deleteTask = function (id) {
     tasksService.deleteTask(id);
+  };
+
+  self.getUserName = function (id) {
+    console.log(id);
+
+    self.user = usersService.viewUser(id);
+
+    console.log(self.user);
+
+    self.name = self.user.name;
   };
 
   // self.markDone = function (task) {

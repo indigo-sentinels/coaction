@@ -3,13 +3,19 @@
   <input ng-model="vm.task.title" required placeholder="title">
   <input ng-model="vm.task.description" required placeholder="description">
   <input ng-model="vm.task.orderId" placeholder="order id">
-  <input ng-model="vm.task.dueDate" placeholder="dueDate">
+  <input ng-model="vm.task.duedate" placeholder="duedate">
+  <input ng-model="vm.task.assignedIds" placeholder="assigned id">
 
   <select ng-model="vm.task.status" required placeholder="status">
     <option value="started">Started</option>
     <option value="new">New</option>
     <option value="done">Done</option>
   </select>
+
+  <div ng-if="!vm.commentDeleted" ng-repeat="comment in vm.task.comments">
+    <input ng-model="comment.text">
+    <button type="button" ng-click="vm.deleteComment(vm.task.taskId, comment)">Delete Comment</button>
+  </div>
 
   <button type="submit">Save</button>
 

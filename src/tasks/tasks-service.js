@@ -40,7 +40,7 @@ app.factory('tasksService', ['$http', '$log', function($http, $log) {
       return processAjaxPromise($http.post('/api/tasks/' + id + '/comments/', comment));
     },
 
-    deleteComment: function(id, commentId, comment) {
+    deleteComment: function(id, commentId) {
       return processAjaxPromise($http.delete('/api/tasks/' + id + '/comments/' + commentId + '/'));
     },
 
@@ -48,7 +48,7 @@ app.factory('tasksService', ['$http', '$log', function($http, $log) {
       return processAjaxPromise($http.post('/api/tasks/' + id + '/todos/', todo));
     },
 
-    deleteTodo: function(id, todoId, comment) {
+    deleteTodo: function(id, todoId) {
       return processAjaxPromise($http.delete('/api/tasks/' + id + '/todos/' + todoId + '/'));
     }
   };

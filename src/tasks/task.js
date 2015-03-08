@@ -10,7 +10,7 @@ app.factory('Task', function() {
       "status": spec.status || "",
       "description": spec.description || "",
       "comments": spec.comments,
-      "dueDate": spec.dueDate || "",
+      "duedate": spec.duedate || "",
       "todos": spec.todos,
       "orderId": spec.orderId
     };

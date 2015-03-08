@@ -30,11 +30,20 @@ app.config(['$routeProvider', function($routeProvider) {
 .controller('EditTaskCtrl', ['task', 'tasksService', '$window', function (task, tasksService, $window) {
   var self = this;
   self.task = task;
+  self.commentDeleted = undefined;
 
   self.deleteTask = function (id) {
     tasksService.deleteTask(id);
 
     $window.location.href = "#/tasks/";
+  };
+
+  self.deleteComment = function (taskId, comment) {
+    console.log(taskId);
+    console.log(comment.id);
+    var commentId = comment.id;
+    tasksService.deleteComment(taskId, commentId);
+    self.commentDeleted = true;
   };
 
   self.addTask = function() {
@@ -163,6 +172,33 @@ app.directive('taskInputView', function () {
   };
 });
 
+app.directive('taskView', function () {
+  return {
+    // E = element
+    // A = attribute
+    // C = class (I wouldn't use this)
+    // M = comment (I wouldn't use this, either)
+    restrict: 'EA',
+    scope: {
+      // @ - Get value from attribute
+      // = - Value has 2-way binding
+      // & - Allows binding to a function
+      task: '=',
+      cssClass: '@'
+    },
+    controller: ['$scope', function ($scope) {
+      this.task = $scope.task;
+      this.cssClass = $scope.cssClass || '';
+    }],
+    controllerAs: 'vm',
+    templateUrl: 'static/tasks/task-view.html',
+    link: function ($scope, element, attrs) {
+      // If you need to manipulate the DOM, this is the
+      // only legit place to do it in the Angular world
+    }
+  };
+});
+
 app.factory('Task', function() {
   return function (spec) {
     spec = spec || {};
@@ -175,7 +211,7 @@ app.factory('Task', function() {
       "status": spec.status || "",
       "description": spec.description || "",
       "comments": spec.comments,
-      "dueDate": spec.dueDate || "",
+      "duedate": spec.duedate || "",
       "todos": spec.todos,
       "orderId": spec.orderId
     };
@@ -191,6 +227,9 @@ app.config(['$routeProvider', function($routeProvider) {
       tasks: ['tasksService', function (tasksService) {
         return tasksService.list();
       }]
+      // user: ['tasksService', function (usersService) {
+      //   return usersService.viewUser()
+      // }]
     }
   };
 
@@ -199,6 +238,9 @@ app.config(['$routeProvider', function($routeProvider) {
 }])
 .controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', function (tasks, tasksService, usersService, $window) {
   var self = this;
+  self.name;
+  self.user;
+
   self.tasks = tasks;
 
   self.goToNewTask = function () {
@@ -207,6 +249,16 @@ app.config(['$routeProvider', function($routeProvider) {
 
   self.deleteTask = function (id) {
     tasksService.deleteTask(id);
+  };
+
+  self.getUserName = function (id) {
+    console.log(id);
+
+    self.user = usersService.viewUser(id);
+
+    console.log(self.user);
+
+    self.name = self.user.name;
   };
 
   // self.markDone = function (task) {
@@ -265,7 +317,7 @@ app.factory('tasksService', ['$http', '$log', function($http, $log) {
       return processAjaxPromise($http.post('/api/tasks/' + id + '/comments/', comment));
     },
 
-    deleteComment: function(id, commentId, comment) {
+    deleteComment: function(id, commentId) {
       return processAjaxPromise($http.delete('/api/tasks/' + id + '/comments/' + commentId + '/'));
     },
 
@@ -273,7 +325,7 @@ app.factory('tasksService', ['$http', '$log', function($http, $log) {
       return processAjaxPromise($http.post('/api/tasks/' + id + '/todos/', todo));
     },
 
-    deleteTodo: function(id, todoId, comment) {
+    deleteTodo: function(id, todoId) {
       return processAjaxPromise($http.delete('/api/tasks/' + id + '/todos/' + todoId + '/'));
     }
   };
@@ -377,7 +429,6 @@ app.factory('usersService', ['$http', function($http) {
 
   function processAjaxPromise(p) {
     return p.then(function (result) {
-      console.log(result.data);
       return result.data;
     })
     .catch(function (error) {
