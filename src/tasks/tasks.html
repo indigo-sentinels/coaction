@@ -9,11 +9,11 @@
 <div class="list">
   <button ng-click="vm.goToNewTask()" class="task-btn">+ Add New Task</button>
 
-  <div class="task" ng-repeat="task in vm.tasks | orderBy: 'timestamp': reverse=true" ng-click="vm.editTask(task.taskId)">
-    <h1>{{task.title}}</h1>
-    <p>{{task.description}}</p>
+  <div class="task" ng-repeat="task in vm.tasks | orderBy: 'orderId'" ng-click="vm.editTask(task.taskId)">
+    <h3>{{task.title}}</h3>
+    <!-- <p>{{task.description}}</p>
     <p>{{task.status}}</p>
-    <p>{{task.dueDate}}</p>
+    <p>{{task.dueDate}}</p> -->
   </div>
 </div>
 
