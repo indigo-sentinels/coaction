@@ -127,6 +127,11 @@ class UserAssignedTasks(APIView):
         else:
             return {"error": "not authorized"}
 
+class CurrentUser(APIView):
+    @login_required
+    def get(self):
+        return {"currentUserId": current_user.id}
+
 
 user.add_url_rule('/users/', view_func=UserListView.as_view('users'))
 user.add_url_rule('/login/', view_func=Login.as_view('login'))
@@ -135,3 +140,4 @@ user.add_url_rule('/logout/', view_func=Logout.as_view('logout'))
 user.add_url_rule('/users/<int:id>/', view_func=UserView.as_view('user'))
 user.add_url_rule('/users/<int:id>/tasks', view_func=UserTasks.as_view('usertasks'))
 user.add_url_rule('/users/<int:id>/assignedtasks', view_func=UserAssignedTasks.as_view('userassignedtasks'))
+user.add_url_rule('/currentUserId/', view_func=CurrentUser.as_view('currentuser'))
