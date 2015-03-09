@@ -75,7 +75,6 @@ class Register(APIView):
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
-                session['user'] = current_user
                 return {"message": "You have been registered and logged in"}
         else:
             return {"error": "Form not validated"}
@@ -85,7 +84,7 @@ class Login(APIView):
     def post(self):
         data = request.get_json()
         form = LoginForm(data=data, formdata=None, csrf_enabled=False)
-        if form.validate_on_submit():
+        if form.validate_on_submit() and current_user.is_authenticated():
             user = User.query.filter_by(email=form.email.data).first()
             if user and user.check_password(form.password.data):
                 login_user(user)
