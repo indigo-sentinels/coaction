@@ -366,10 +366,14 @@ app.config(['$routeProvider', function($routeProvider) {
 
   self.loginUser = function() {
     usersService.loginUser(self.user).then(function() {
-      return $window.location.href= "#/tasks";
+      return self.redirectLogin();
     });
 
     self.user = User();
+  };
+
+  self.redirectLogin = function() {
+    $window.location.href= "#/tasks";
   };
 }]);
 
