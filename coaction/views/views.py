@@ -23,7 +23,6 @@ class TaskListView(APIView):
         result = serializer.dump(tasks)
         return {"tasks": result.data}
 
-    @login_required
     def post(self):
         data = request.get_json(force=True)
         form = TaskForm(data=data, formdata=None, csrf_enabled=False)
@@ -64,7 +63,6 @@ class TaskView(APIView):
         result = serializer.dump(task)
         return {"deleted": result.data}
 
-    @login_required
     def put(self, id):
         data = request.get_json(force=True)
         task = Task.query.get_or_404(id)
