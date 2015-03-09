@@ -84,15 +84,17 @@ class Login(APIView):
     def post(self):
         data = request.get_json()
         form = LoginForm(data=data, formdata=None, csrf_enabled=False)
-        if form.validate_on_submit() and current_user.is_authenticated():
+        if current_user.is_authenticated():
+            return {"result": "User is logged in"}
+        if form.validate_on_submit():
             user = User.query.filter_by(email=form.email.data).first()
             if user and user.check_password(form.password.data):
                 login_user(user)
-                session['userId'] = current_user.id
                 return {"result": "success"}
             else:
                 return {"result": "password failure"}
         else:
+            logout_user()
             return {"result": "form failure"}
 
 
