@@ -245,8 +245,8 @@ app.config(['$routeProvider', function($routeProvider) {
 }])
 .controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', function (tasks, tasksService, usersService, $window) {
   var self = this;
-  self.name;
-  self.user;
+  // self.name;
+  // self.user;
 
   self.tasks = tasks;
 
@@ -261,11 +261,11 @@ app.config(['$routeProvider', function($routeProvider) {
   self.getUserName = function (id) {
     console.log(id);
 
-    self.user = usersService.viewUser(id);
-
-    console.log(self.user);
-
-    self.name = self.user.name;
+    // self.user = usersService.viewUser(id);
+    //
+    // console.log(self.user);
+    //
+    // self.name = self.user.name;
   };
 
   // self.markDone = function (task) {
@@ -369,7 +369,7 @@ app.config(['$routeProvider', function($routeProvider) {
       return self.redirectLogin();
     });
 
-    self.user = User();
+    // self.user = User();
   };
 
   self.redirectLogin = function() {
@@ -391,11 +391,15 @@ app.config(['$routeProvider', function($routeProvider) {
   self.user = User();
 
   self.addUser = function() {
-    usersService.registerUser(self.user);
+    usersService.registerUser(self.user).then(function() {
+      return self.redirectRegister();
+    });
 
-    self.user = User();
+    // self.user = User();
+  };
 
-    $window.location.href= "#/tasks";
+  self.redirectRegister = function () {
+    $window.location.href= "#/login";
   };
 }]);
 
@@ -433,7 +437,7 @@ app.factory('User', function() {
   };
 });
 
-app.factory('usersService', ['$http', function($http) {
+app.factory('usersService', ['$http', '$log', function($http, $log) {
   function get(url) {
     return processAjaxPromise($http.get(url));
   }

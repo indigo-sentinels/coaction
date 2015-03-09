@@ -1,4 +1,4 @@
-app.factory('usersService', ['$http', function($http) {
+app.factory('usersService', ['$http', '$log', function($http, $log) {
   function get(url) {
     return processAjaxPromise($http.get(url));
   }

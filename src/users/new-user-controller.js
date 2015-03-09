@@ -12,10 +12,14 @@ app.config(['$routeProvider', function($routeProvider) {
   self.user = User();
 
   self.addUser = function() {
-    usersService.registerUser(self.user);
+    usersService.registerUser(self.user).then(function() {
+      return self.redirectRegister();
+    });
 
-    self.user = User();
+    // self.user = User();
+  };
 
-    $window.location.href= "#/tasks";
+  self.redirectRegister = function () {
+    $window.location.href= "#/login";
   };
 }]);

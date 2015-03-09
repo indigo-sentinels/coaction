@@ -18,8 +18,8 @@ app.config(['$routeProvider', function($routeProvider) {
 }])
 .controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', function (tasks, tasksService, usersService, $window) {
   var self = this;
-  self.name;
-  self.user;
+  // self.name;
+  // self.user;
 
   self.tasks = tasks;
 
@@ -34,11 +34,11 @@ app.config(['$routeProvider', function($routeProvider) {
   self.getUserName = function (id) {
     console.log(id);
 
-    self.user = usersService.viewUser(id);
-
-    console.log(self.user);
-
-    self.name = self.user.name;
+    // self.user = usersService.viewUser(id);
+    //
+    // console.log(self.user);
+    //
+    // self.name = self.user.name;
   };
 
   // self.markDone = function (task) {

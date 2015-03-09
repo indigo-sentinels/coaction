@@ -16,7 +16,7 @@ app.config(['$routeProvider', function($routeProvider) {
       return self.redirectLogin();
     });
 
-    self.user = User();
+    // self.user = User();
   };
 
   self.redirectLogin = function() {
