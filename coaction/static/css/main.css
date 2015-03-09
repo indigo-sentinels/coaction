@@ -548,6 +548,17 @@ input {
   margin-bottom: 1em;
   border-radius: 4px; }
 
+.task-status {
+  position: relative;
+  background: bisque;
+  width: 5em;
+  left: -16px;
+  top: -2px;
+  padding-left: 1em;
+  padding-top: 0.25em;
+  padding-bottom: .25em;
+  text-transform: uppercase; }
+
 .task-btn {
   margin-bottom: 1em;
   background: #00FFFF;

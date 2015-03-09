@@ -10,7 +10,7 @@
   <button ng-click="vm.goToNewTask()" class="task-btn">+ Add New Task</button>
 
   <div class="task" ng-init="vm.getUserName(task.assignedIds)" ng-repeat="task in vm.tasks | orderBy: 'orderId'" ng-click="vm.editTask(task.taskId)">
-    <p>{{task.status}}</p>
+    <p class="task-status">{{task.status}}</p>
     <p>{{task.duedate}}</p>
     <p>{{task.assignedIds}}</p>
     <p>{{vm.name}}</p>

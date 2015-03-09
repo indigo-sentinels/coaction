@@ -7,7 +7,7 @@ app.factory('Task', function() {
       "taskId": spec.taskId || "",
       "timestamp": spec.timestamp || "",
       "assignedIds": spec.assignedIds,
-      "status": spec.status || "",
+      "status": spec.status || "todo",
       "description": spec.description || "",
       "comments": spec.comments,
       "duedate": spec.duedate || "",

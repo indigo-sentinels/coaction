@@ -215,7 +215,7 @@ app.factory('Task', function() {
       "taskId": spec.taskId || "",
       "timestamp": spec.timestamp || "",
       "assignedIds": spec.assignedIds,
-      "status": spec.status || "",
+      "status": spec.status || "todo",
       "description": spec.description || "",
       "comments": spec.comments,
       "duedate": spec.duedate || "",
@@ -365,11 +365,11 @@ app.config(['$routeProvider', function($routeProvider) {
   self.user = User();
 
   self.loginUser = function() {
-    usersService.loginUser(self.user);
+    usersService.loginUser(self.user).then(function() {
+      $window.location.href= "#/tasks";
+    });
 
     self.user = User();
-
-    $window.location.href= "#/tasks";
   };
 }]);
 
