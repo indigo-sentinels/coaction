@@ -7,25 +7,21 @@ app.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider.when('/login/', routeDefinition);
 }])
-.controller('LoginCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
+.controller('LoginCtrl', ['usersService', 'User', '$window', '$currentUserId', function (usersService, User, $window, $currentUserId) {
   var self = this;
   self.user = User();
-  self.id = undefined;
+  self.id = currentUserId;
 
   self.loginUser = function() {
-    usersService.viewUser(self.user).then(function() {
-      self.id = self.user.id;
-    })
-    .then(function() {
-      usersService.loginUser(self.user).then(function() {
-        return self.redirectLogin();
-      });
-    });
 
+    usersService.loginUser(self.user).then(function() {
+      return self.redirectLogin();
+    });
     // self.user = User();
   };
 
   self.redirectLogin = function() {
-    $window.location.href= "#/users/" + self.user.id + "/tasks/";
+    // $window.location.href= "#/users/" + self.id + "/tasks/";
+    $window.location.href="#/welcome";
   };
 }]);

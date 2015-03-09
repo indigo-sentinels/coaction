@@ -24,6 +24,10 @@ app.factory('tasksService', ['$http', '$log', function($http, $log) {
       return get('/api/tasks/' + id);
     },
 
+    getTasksByUserId: function (id) {
+      return get('/api/users/' + id + "/tasks/");
+    },
+
     addTask: function(task) {
       return processAjaxPromise($http.post('/api/tasks/', task));
     },

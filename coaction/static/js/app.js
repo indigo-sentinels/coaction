@@ -231,22 +231,22 @@ app.config(['$routeProvider', function($routeProvider) {
     controller: 'TasksCtrl',
     controllerAs: 'vm',
     resolve: {
-      tasks: ['tasksService', function (tasksService) {
-        return tasksService.list();
+      tasks: ['tasksService', '$route', function (tasksService, $route) {
+        var routeParams = $route.current.params;
+        var id = routeParams.id;
+        return tasksService.getTasksByUserId(id);
       }]
-      // user: ['tasksService', function (usersService) {
-      //   return usersService.viewUser()
-      // }]
     }
   };
 
   // $routeProvider.when('/', routeDefinition);
-  $routeProvider.when('/tasks', routeDefinition);
+  $routeProvider.when('/users/:id/tasks', routeDefinition);
 }])
 .controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', function (tasks, tasksService, usersService, $window) {
   var self = this;
   // self.name;
   // self.user;
+  console.log(tasks);
 
   self.tasks = tasks;
 
@@ -308,6 +308,10 @@ app.factory('tasksService', ['$http', '$log', function($http, $log) {
       return get('/api/tasks/' + id);
     },
 
+    getTasksByUserId: function (id) {
+      return get('/api/users/' + id + "/tasks/");
+    },
+
     addTask: function(task) {
       return processAjaxPromise($http.post('/api/tasks/', task));
     },
@@ -360,26 +364,22 @@ app.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider.when('/login/', routeDefinition);
 }])
-.controller('LoginCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
+.controller('LoginCtrl', ['usersService', 'User', '$window', '$currentUserId', function (usersService, User, $window, $currentUserId) {
   var self = this;
   self.user = User();
-  self.id = undefined;
+  self.id = currentUserId;
 
   self.loginUser = function() {
-    usersService.viewUser(self.user).then(function() {
-      self.id = self.user.id;
-    })
-    .then(function() {
-      usersService.loginUser(self.user).then(function() {
-        return self.redirectLogin();
-      });
-    });
 
+    usersService.loginUser(self.user).then(function() {
+      return self.redirectLogin();
+    });
     // self.user = User();
   };
 
   self.redirectLogin = function() {
-    $window.location.href= "#/users/" + self.user.id + "/tasks/";
+    // $window.location.href= "#/users/" + self.id + "/tasks/";
+    $window.location.href="#/welcome";
   };
 }]);
 
@@ -462,6 +462,10 @@ app.factory('usersService', ['$http', '$log', function($http, $log) {
       return get('/api/users/');
     },
 
+    getCurrentUserId: function() {
+      return get('/api/users/currentUserId/');
+    },
+
     viewUser: function (id) {
       return get('/api/users/' + id);
     },
@@ -481,6 +485,30 @@ app.factory('usersService', ['$http', '$log', function($http, $log) {
     deleteUser: function(id) {
       return processAjaxPromise($http.delete('/api/users/' + id + '/'));
     }
+  };
+}]);
+
+app.config(['$routeProvider', function($routeProvider) {
+  var routeDefinition = {
+    templateUrl: 'static/users/welcome.html',
+    controller: 'WelcomeCtrl',
+    controllerAs: 'vm',
+    resolve: {
+      currentUserId: ['usersService', function (usersService) {
+        return usersService.getCurrentUserId();
+      }]
+    }
+  };
+
+  $routeProvider.when('/welcome/', routeDefinition);
+}])
+.controller('WelcomeCtrl', ['usersService', 'User', '$window', '$currentUserId', function (usersService, User, $window, $currentUserId) {
+  var self = this;
+  self.id = currentUserId;
+
+  self.goToBoard = function() {
+    $window.location.href= "#/tasks/";
+    // $window.location.href="#/welcome";
   };
 }]);
 

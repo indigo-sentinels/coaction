@@ -4,22 +4,22 @@ app.config(['$routeProvider', function($routeProvider) {
     controller: 'TasksCtrl',
     controllerAs: 'vm',
     resolve: {
-      tasks: ['tasksService', function (tasksService) {
-        return tasksService.list();
+      tasks: ['tasksService', '$route', function (tasksService, $route) {
+        var routeParams = $route.current.params;
+        var id = routeParams.id;
+        return tasksService.getTasksByUserId(id);
       }]
-      // user: ['tasksService', function (usersService) {
-      //   return usersService.viewUser()
-      // }]
     }
   };
 
   // $routeProvider.when('/', routeDefinition);
-  $routeProvider.when('/tasks', routeDefinition);
+  $routeProvider.when('/users/:id/tasks', routeDefinition);
 }])
 .controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', function (tasks, tasksService, usersService, $window) {
   var self = this;
   // self.name;
   // self.user;
+  console.log(tasks);
 
   self.tasks = tasks;
 
