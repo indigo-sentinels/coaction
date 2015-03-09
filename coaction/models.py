@@ -1,8 +1,7 @@
 from .extensions import db, login_manager
 from flask.ext.login import UserMixin, current_user
 from marshmallow import Schema, fields
-from sqlalchemy import func
-from datetime import datetime
+from flask import session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -75,7 +74,7 @@ class Task(db.Model):
         self.orderId = orderId
         self.comments = comments
         self.todos = todos
-        self.userId = 1
+        self.userId = session['userId']
         self.listId = listId
 
 
@@ -93,6 +92,7 @@ class Todo(db.Model):
         self.userId = 1
         self.text = text
         self.status = status
+
 
 # --------------------- SCHEMAS ----------------------
 
