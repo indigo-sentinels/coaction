@@ -46,7 +46,7 @@ class Comment(db.Model):
 
     def __init__(self, taskId, text):
         self.taskId = taskId
-        self.userId = 1
+        self.userId = current_user.id
         self.text = text
 
 
@@ -74,7 +74,7 @@ class Task(db.Model):
         self.orderId = orderId
         self.comments = comments
         self.todos = todos
-        self.userId = session['userId']
+        self.userId = current_user.id
         self.listId = listId
 
 
@@ -89,7 +89,7 @@ class Todo(db.Model):
 
     def __init__(self, taskId, text, status):
         self.taskId = taskId
-        self.userId = 1
+        self.userId = current_user.id
         self.text = text
         self.status = status
 
