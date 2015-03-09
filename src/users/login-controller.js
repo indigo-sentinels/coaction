@@ -12,10 +12,11 @@ app.config(['$routeProvider', function($routeProvider) {
   self.user = User();
 
   self.loginUser = function() {
-    usersService.loginUser(self.user);
+    usersService.loginUser(self.user).then(function() {
+      return $window.location.href= "#/tasks";
+    });
 
     self.user = User();
 
-    $window.location.href= "#/tasks";
   };
 }]);
