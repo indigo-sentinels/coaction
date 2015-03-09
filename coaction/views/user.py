@@ -1,5 +1,5 @@
 import base64
-from flask import Blueprint, request
+from flask import Blueprint, request, session
 from flask.ext.login import current_user, abort, login_user, logout_user, login_required
 from ..models import User, UserSchema, Task, TaskSchema
 from ..extensions import db, login_manager
@@ -24,6 +24,7 @@ def authorize_user(request):
         password = authorization['password']
         user = User.query.filter_by(email=email).first()
         if user.check_password(password):
+            session['user'] = user
             return user
 
     return None
@@ -35,6 +36,7 @@ def require_authorization():
 
 
 class UserListView(APIView):
+    @login_required
     def get(self):
         users = User.query.all()
         if users:
@@ -46,6 +48,7 @@ class UserListView(APIView):
 
 
 class UserView(APIView):
+    @login_required
     def get(self, id):
         user = User.query.get(id)
         if user:
@@ -72,6 +75,7 @@ class Register(APIView):
                 db.session.add(user)
                 db.session.commit()
                 login_user(user)
+                session['user'] = current_user
                 return {"message": "You have been registered and logged in"}
         else:
             return {"error": "Form not validated"}
@@ -85,6 +89,7 @@ class Login(APIView):
             user = User.query.filter_by(email=form.email.data).first()
             if user and user.check_password(form.password.data):
                 login_user(user)
+                session['userId'] = current_user.id
                 return {"result": "success"}
             else:
                 return {"result": "password failure"}
@@ -93,12 +98,14 @@ class Login(APIView):
 
 
 class Logout(APIView):
+    @login_required
     def post(self):
         logout_user()
         return {"result": "logged out"}
 
 
 class UserTasks(APIView):
+    @login_required
     def get(self, id):
         print('getting tasks')
         if current_user.id == id:
@@ -110,6 +117,7 @@ class UserTasks(APIView):
             return {"error": "not authorized"}
 
 class UserAssignedTasks(APIView):
+    @login_required
     def get(self, id):
         if current_user.id == id:
             tasks = Task.query.filter_by(assignedIds = id)

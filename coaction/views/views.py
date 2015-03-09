@@ -17,12 +17,14 @@ def index():
 
 
 class TaskListView(APIView):
+    @login_required
     def get(self):
         tasks = Task.query.all()
         serializer = TaskSchema(many=True)
         result = serializer.dump(tasks)
         return {"tasks": result.data}
 
+    @login_required
     def post(self):
         data = request.get_json(force=True)
         form = TaskForm(data=data, formdata=None, csrf_enabled=False)
@@ -45,6 +47,7 @@ class TaskListView(APIView):
 
 
 class TaskView(APIView):
+    @login_required
     def get(self, id):
         task = Task.query.get_or_404(id)
         comments = Comment.query.filter_by(taskId = id).all()
@@ -55,6 +58,7 @@ class TaskView(APIView):
         task_result = task_serializer.dump(task)
         return task_result.data
 
+    @login_required
     def delete(self, id):
         task = Task.query.get_or_404(id)
         db.session.delete(task)
@@ -63,6 +67,7 @@ class TaskView(APIView):
         result = serializer.dump(task)
         return {"deleted": result.data}
 
+    @login_required
     def put(self, id):
         data = request.get_json(force=True)
         task = Task.query.get_or_404(id)
@@ -74,12 +79,14 @@ class TaskView(APIView):
         return result.data
 
 class CommentListView(APIView):
+    @login_required
     def get(self, id):
         comments = Comment.query.filter_by(taskId = id)
         serializer = CommentSchema(many=True)
         result = serializer.dump(comments)
         return {"comments": result.data}
 
+    @login_required
     def post(self, id):
         data = request.get_json()
         form = CommentForm(data=data, formdata=None, csrf_enabled=False)
@@ -95,6 +102,7 @@ class CommentListView(APIView):
             return {"form": "not validated"}
 
 class CommentView(APIView):
+    @login_required
     def delete(self, task, comment):
         comment = Comment.query.get_or_404(comment)
         db.session.delete(comment)
@@ -103,6 +111,7 @@ class CommentView(APIView):
         result = serializer.dump(comment)
         return {"deleted from task {}".format(task): result.data}
 
+    @login_required
     def get(self, task, comment):
         comment = Comment.query.get_or_404(comment)
         serializer = CommentSchema()
@@ -110,12 +119,14 @@ class CommentView(APIView):
         return {"from task {}".format(task): result.data}
 
 class TodoListView(APIView):
+    @login_required
     def get(self, task):
         todos = Todo.query.filter_by(taskId = task).all()
         serializer = TodoSchema(many=True)
         result = serializer.dump(todos)
         return {"todos": result.data}
 
+    @login_required
     def post(self, task):
         data = request.get_json()
         form = TodoForm(data=data, formdata=None, csrf_enabled=False)
@@ -130,12 +141,14 @@ class TodoListView(APIView):
 
 
 class TodoView(APIView):
+    @login_required
     def get(self, task, todo):
         todo = Todo.query.filter_by(id = todo).first()
         serializer = TodoSchema()
         result = serializer.dump(todo)
         return result.data
 
+    @login_required
     def delete(self, task, todo):
         todo = Todo.query.filter_by(id = todo).first()
         db.session.delete(todo)

@@ -366,7 +366,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
   self.loginUser = function() {
     usersService.loginUser(self.user).then(function() {
-      $window.location.href= "#/tasks";
+      return $window.location.href= "#/tasks";
     });
 
     self.user = User();
