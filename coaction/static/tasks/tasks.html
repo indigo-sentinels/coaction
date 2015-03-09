@@ -5,6 +5,31 @@
   </ul>
 </div>
 
+<div class="list">
+  <button ng-click="vm.goToNewTask()" class="task-btn">+ Add New Task</button>
+
+  <div class="task" ng-init="vm.getUserName(task.assignedIds)" ng-repeat="task in vm.tasks | orderBy: 'orderId'" ng-click="vm.editTask(task.taskId)">
+    <p class="task-status">{{task.status}}</p>
+    <p>{{task.duedate}}</p>
+    <p>{{task.assignedIds}}</p>
+    <p>{{vm.name}}</p>
+    <h3>{{task.title}}</h3>
+    <!-- <p>{{task.description}}</p> -->
+  </div>
+</div>
+
+<div class="list">
+  <button ng-click="vm.goToNewTask()" class="task-btn">+ Add New Task</button>
+
+  <div class="task" ng-init="vm.getUserName(task.assignedIds)" ng-repeat="task in vm.tasks | orderBy: 'orderId'" ng-click="vm.editTask(task.taskId)">
+    <p class="task-status">{{task.status}}</p>
+    <p>{{task.duedate}}</p>
+    <p>{{task.assignedIds}}</p>
+    <p>{{vm.name}}</p>
+    <h3>{{task.title}}</h3>
+    <!-- <p>{{task.description}}</p> -->
+  </div>
+</div>
 
 <div class="list">
   <button ng-click="vm.goToNewTask()" class="task-btn">+ Add New Task</button>
