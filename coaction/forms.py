@@ -8,7 +8,7 @@ class TaskForm(Form):
     title = StringField('title', validators=[DataRequired()])
     status = StringField('status', default="New")
     description = StringField('Description')
-    duedate = DateField('Date')
+    duedate = StringField('Date')
     assignedIds = IntegerField("assignedIds")
     orderId = IntegerField('orderId')
     comments = StringField("comment", default=None)

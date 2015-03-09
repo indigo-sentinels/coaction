@@ -80,16 +80,11 @@ class Register(APIView):
 class Login(APIView):
     def post(self):
         data = request.get_json()
-        print('getting data')
         form = LoginForm(data=data, formdata=None, csrf_enabled=False)
-        print('form')
         if form.validate_on_submit():
             user = User.query.filter_by(email=form.email.data).first()
-            print('user query')
             if user and user.check_password(form.password.data):
-                print('passwordcheck')
                 login_user(user)
-                print('login user')
                 return {"result": "success"}
             else:
                 return {"result": "password failure"}
@@ -99,9 +94,7 @@ class Login(APIView):
 
 class Logout(APIView):
     def post(self):
-        print("logging out {}".format(current_user.id))
         logout_user()
-        print(current_user)
         return {"result": "logged out"}
 
 
@@ -109,13 +102,9 @@ class UserTasks(APIView):
     def get(self, id):
         print('getting tasks')
         if current_user.id == id:
-            print("user id == id")
             tasks = Task.query.filter_by(userId = id)
-            print('tasks querying')
             serializer = TaskSchema(many=True)
-            print('serializer')
             result = serializer.dump(tasks)
-            print('serializer dumps')
             return {"tasks": result.data}
         else:
             return {"error": "not authorized"}

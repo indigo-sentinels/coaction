@@ -47,7 +47,7 @@ class Comment(db.Model):
 
     def __init__(self, taskId, text):
         self.taskId = taskId
-        self.userId = current_user.id
+        self.userId = 1
         self.text = text
 
 
@@ -65,23 +65,17 @@ class Task(db.Model):
     user = db.relationship('User',
                            backref=db.backref('tasks', lazy='dynamic'))
 
-    def check_date(self, date):
-        if date == None:
-            return None
-        else:
-            return datetime.strptime(date, "%Y/%m/%d")
-
 
     def __init__(self, title, status, duedate, description, assignedIds, orderId, comments, todos, listId):
         self.title = title
         self.status = status
-        self.duedate = self.check_date(duedate)
+        self.duedate = duedate
         self.description = description
         self.assignedIds = assignedIds
         self.orderId = orderId
         self.comments = comments
         self.todos = todos
-        self.userId = current_user.id
+        self.userId = 1
         self.listId = listId
 
 
@@ -96,7 +90,7 @@ class Todo(db.Model):
 
     def __init__(self, taskId, text, status):
         self.taskId = taskId
-        self.userId = current_user.id
+        self.userId = 1
         self.text = text
         self.status = status
 
