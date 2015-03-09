@@ -1,8 +1,7 @@
 .section__app {
   background-image: url(../img/app1.jpg);
   background-size: cover;
-  background-attachment: fixed;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -24,14 +23,13 @@
 
 .homepage-logo {
   top: 50%;
-  left: 11.5%;
-  transform: translate(-50%, -50%);
+  left: 7.5%;
   line-height: 1em;
   font-family: 'Lato', sans-serif;
   font-weight: 100;
   font-size: 1.95em;
   text-transform: uppercase;
-  position: absolute;
+  position: relative;
 }
 
 .logo {
@@ -46,26 +44,87 @@
   text-decoration: none;
 }
 
-.list {
-  box-sizing: border-box;
-  width: 350px;
-  background-color: #E3E3E3;
-  border-radius: 8px;
-  position: absolute;
+.list-group {
+width: 100%;
   top: 11%;
-  left: 50%;
-  transform: translate(-50%,0);
-  color: #333;
-  transition: height .1s;
-  visibility: visible;
-  padding: .5em 1em;
+  left: 13%;
   overflow: auto;
 }
 
+.todo-list {
+box-sizing: border-box;
+  width: 350px;
+  max-height: 630px;
+  background-color: #E3E3E3;
+  border-radius: 8px;
+  position: absolute;
+  top: 12%;
+  left: 31px;
+  padding: .5em 1em;
+  overflow: scroll;
+  float: left;
+}
+
+.doing-list {
+box-sizing: border-box;
+  width: 350px;
+  max-height: 630px;
+  background-color: #E3E3E3;
+  border-radius: 8px;
+  position: absolute;
+  top: 12%;
+  left: 405px;
+  padding: .5em 1em;
+  overflow: scroll;
+  float: left;
+}
+
+.done-list {
+  box-sizing: border-box;
+  width: 350px;
+  max-height: 630px;
+  background-color: #E3E3E3;
+  border-radius: 8px;
+  position: absolute;
+  top: 12%;
+  left: 785px;
+  padding: .5em 1em;
+  overflow: scroll;
+  float: left;
+}
+
+.todo-header{
+  position: absolute;
+  top: 12%;
+  left: 47px;
+  z-index: 100;
+  background: #E3E3E3;
+  height: 76px;
+}
+
+.doing-header{
+  position: absolute;
+  top: 12%;
+  left: 422px;
+  z-index: 100;
+  background: #E3E3E3;
+  height: 76px;
+}
+
+.done-header{
+  position: absolute;
+  top: 12%;
+  left: 804px;
+  z-index: 100;
+  background: #E3E3E3;
+  height: 76px;
+}
+
 .list-title {
-  max-width: 255px;
-  height: auto;
+  margin-top: 0.7em;
   text-transform: uppercase;
+  font-size: 1.75em;
+  position: absolute;
 }
 
 .list-item {
@@ -73,6 +132,10 @@
   resize: none;
   width: 222px;
   height: auto;
+}
+
+.task-group {
+  margin-top: 23%;
 }
 
 .task {
@@ -84,9 +147,10 @@
   border-radius: 4px;
 }
 
-.task-status {
+.status-todo {
+  background: aqua;
+  display: inline-block;
   position: relative;
-  background: bisque;
   width: 5em;
   left: -16px;
   top: -2px;
@@ -94,12 +158,57 @@
   padding-top: 0.25em;
   padding-bottom: .25em;
   text-transform: uppercase;
+  margin-bottom: 0em;
+}
+
+.status-doing {
+  background: #d3c4a9;
+  display: inline-block;
+  position: relative;
+  width: 5em;
+  left: -16px;
+  top: -2px;
+  padding-left: 1em;
+  padding-top: 0.25em;
+  padding-bottom: .25em;
+  text-transform: uppercase;
+  margin-bottom: 0em;
+}
+
+.status-done {
+  background: #C5ABCB;
+  display: inline-block;
+  position: relative;
+  width: 5em;
+  left: -16px;
+  top: -2px;
+  padding-left: 1em;
+  padding-top: 0.25em;
+  padding-bottom: .25em;
+  text-transform: uppercase;
+  margin-bottom: 0em;
+}
+
+.task-duedate {
+  display: inline-block;
+  float: right;
+  margin-right: 1em;
+  margin-top: 0.2em;
+}
+
+.overdue {
+  color: red;
 }
 
 .task-btn {
-  margin-bottom: 1em;
-  background: #00FFFF;
+  background: #D5CECC;
   color: black;
+  position: relative;
+  width: 185px;
+  top: 13px;
+  margin-left: 133px;
+  height: 47px;
+  z-index: 100;
 }
 
 .list-item-textarea {
@@ -121,4 +230,8 @@
   word-wrap: break-word;
   padding: 0.3em .5em;
   opacity: 0;
+}
+
+.logout-btn {
+  margin-top: 14px;
 }

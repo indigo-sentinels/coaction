@@ -131,10 +131,10 @@ input {
   font-weight: 100;
   font-size: 1.1em;
   text-transform: uppercase;
-  position: absolute;
-  top: 50%;
+  position: relative;
+  top: 7%;
   right: 7%;
-  transform: translate(0, -20%);
+  float: right;
 }
 
 .navbar-items__left {
@@ -154,7 +154,7 @@ input {
 
 .navbar__login {
   color: white;
-  margin-right: 2.25em;
+  margin-right: 1.25em;
 }
 
 .navbar-items__left li {

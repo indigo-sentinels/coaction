@@ -1,46 +1,56 @@
 <div class="navbar-main">
   <div class="logo">Wait<span class="underline-logo">list</span></div>
   <ul class="navbar-items">
-    <a ng-click="vm.logoutUser()"><li class="navbar__signup">Logout</li></a>
+    <a ng-click="vm.logoutUser()"><li class="navbar__signup logout-btn">Logout</li></a>
   </ul>
 </div>
 
-<div class="list">
-  <button ng-click="vm.goToNewTask()" class="task-btn">+ Add New Task</button>
-
-  <div class="task" ng-init="vm.getUserName(task.assignedIds)" ng-repeat="task in vm.tasks | orderBy: 'orderId'" ng-click="vm.editTask(task.taskId)">
-    <p class="task-status">{{task.status}}</p>
-    <p>{{task.duedate}}</p>
-    <p>{{task.assignedIds}}</p>
-    <p>{{vm.name}}</p>
-    <h3>{{task.title}}</h3>
-    <!-- <p>{{task.description}}</p> -->
+<div class="list-group">
+  <div class="todo-header">
+    <span class="list-title">To-Do</span>
+    <button ng-click="vm.goToNewTask()" class="task-btn">+ Add New Task</button>
   </div>
-</div>
 
-<div class="list">
-  <button ng-click="vm.goToNewTask()" class="task-btn">+ Add New Task</button>
+  <div class="todo-list">
+    <div class="task-group">
+      <div class="task" ng-init="vm.getUserName(task.assignedIds)" ng-if="task.userId == vm.currentUserId && task.status == 'todo'" ng-repeat="task in vm.tasks | orderBy: 'orderId'" ng-click="vm.editTask(task.taskId)">
+        <p class="task-status status-todo">{{task.status}}</p>
+        <p class="task-duedate" ng-class="{'overdue': task.duedate < new Date() }" ng-if="task.duedate">Due: {{task.duedate}}</p>
+        <h3>{{task.title}}</h3>
+      </div>
+    </div>
 
-  <div class="task" ng-init="vm.getUserName(task.assignedIds)" ng-repeat="task in vm.tasks | orderBy: 'orderId'" ng-click="vm.editTask(task.taskId)">
-    <p class="task-status">{{task.status}}</p>
-    <p>{{task.duedate}}</p>
-    <p>{{task.assignedIds}}</p>
-    <p>{{vm.name}}</p>
-    <h3>{{task.title}}</h3>
-    <!-- <p>{{task.description}}</p> -->
   </div>
-</div>
 
-<div class="list">
-  <button ng-click="vm.goToNewTask()" class="task-btn">+ Add New Task</button>
+  <div class="doing-header">
+    <span class="list-title">Doing</span>
+    <button ng-click="vm.goToNewTask()" class="task-btn">+ Add New Task</button>
+  </div>
 
-  <div class="task" ng-init="vm.getUserName(task.assignedIds)" ng-repeat="task in vm.tasks | orderBy: 'orderId'" ng-click="vm.editTask(task.taskId)">
-    <p class="task-status">{{task.status}}</p>
-    <p>{{task.duedate}}</p>
-    <p>{{task.assignedIds}}</p>
-    <p>{{vm.name}}</p>
-    <h3>{{task.title}}</h3>
-    <!-- <p>{{task.description}}</p> -->
+  <div class="doing-list">
+    <div class="task-group">
+      <div class="task" ng-init="vm.getUserName(task.assignedIds)" ng-if="task.userId == vm.currentUserId && task.status == 'doing'" ng-repeat="task in vm.tasks | orderBy: 'orderId'" ng-click="vm.editTask(task.taskId)">
+        <p class="task-status status-doing">{{task.status}}</p>
+        <p class="task-duedate" ng-class="{'overdue': Date()}" ng-if="task.duedate">Due: {{task.duedate}}</p>
+        {{vm.currentDate}}
+        <h3>{{task.title}}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="done-header">
+    <span class="list-title">Done</span>
+    <button ng-click="vm.goToNewTask()" class="task-btn">+ Add New Task</button>
+  </div>
+
+  <div class="done-list">
+    <div class="task-group">
+      <div class="task" ng-init="vm.getUserName(task.assignedIds)" ng-if="task.userId == vm.currentUserId && task.status == 'done'" ng-repeat="task in vm.tasks | orderBy: 'orderId'" ng-click="vm.editTask(task.taskId)">
+        <p class="task-status status-done">{{task.status}}</p>
+        <p class="task-duedate" ng-class="{'overdue': task.duedate < new Date() }" ng-if="task.duedate">Due: {{task.duedate}}</p>
+        <h3>{{task.title}}</h3>
+      </div>
+    </div>
   </div>
 </div>
 

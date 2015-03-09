@@ -7,21 +7,28 @@ app.config(['$routeProvider', function($routeProvider) {
       tasks: ['tasksService', '$route', function (tasksService, $route) {
         var routeParams = $route.current.params;
         var id = routeParams.id;
-        return tasksService.getTasksByUserId(id);
+        return tasksService.list();
+      }],
+      currentUserId: ['usersService', function(usersService) {
+        return usersService.getCurrentUserId();
       }]
     }
   };
 
   // $routeProvider.when('/', routeDefinition);
-  $routeProvider.when('/users/:id/tasks', routeDefinition);
+  $routeProvider.when('/tasks', routeDefinition);
 }])
-.controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', function (tasks, tasksService, usersService, $window) {
+.controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', 'currentUserId', function (tasks, tasksService, usersService, $window, currentUserId) {
   var self = this;
   // self.name;
   // self.user;
-  console.log(tasks);
+  // console.log(tasks);
+
+  self.currentUserId = currentUserId;
 
   self.tasks = tasks;
+
+  self.currentDate = new Date();
 
   self.goToNewTask = function () {
     $window.location.href = '#/tasks/new/';
@@ -32,7 +39,6 @@ app.config(['$routeProvider', function($routeProvider) {
   };
 
   self.getUserName = function (id) {
-    console.log(id);
 
     // self.user = usersService.viewUser(id);
     //

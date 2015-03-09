@@ -7,10 +7,10 @@ app.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider.when('/login/', routeDefinition);
 }])
-.controller('LoginCtrl', ['usersService', 'User', '$window', '$currentUserId', function (usersService, User, $window, $currentUserId) {
+.controller('LoginCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
   var self = this;
   self.user = User();
-  self.id = currentUserId;
+  // self.id = currentUserId;
 
   self.loginUser = function() {
 
@@ -22,6 +22,6 @@ app.config(['$routeProvider', function($routeProvider) {
 
   self.redirectLogin = function() {
     // $window.location.href= "#/users/" + self.id + "/tasks/";
-    $window.location.href="#/welcome";
+    $window.location.href="#/tasks";
   };
 }]);

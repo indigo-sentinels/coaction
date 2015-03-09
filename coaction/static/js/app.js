@@ -234,21 +234,28 @@ app.config(['$routeProvider', function($routeProvider) {
       tasks: ['tasksService', '$route', function (tasksService, $route) {
         var routeParams = $route.current.params;
         var id = routeParams.id;
-        return tasksService.getTasksByUserId(id);
+        return tasksService.list();
+      }],
+      currentUserId: ['usersService', function(usersService) {
+        return usersService.getCurrentUserId();
       }]
     }
   };
 
   // $routeProvider.when('/', routeDefinition);
-  $routeProvider.when('/users/:id/tasks', routeDefinition);
+  $routeProvider.when('/tasks', routeDefinition);
 }])
-.controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', function (tasks, tasksService, usersService, $window) {
+.controller('TasksCtrl', ['tasks', 'tasksService', 'usersService', '$window', 'currentUserId', function (tasks, tasksService, usersService, $window, currentUserId) {
   var self = this;
   // self.name;
   // self.user;
-  console.log(tasks);
+  // console.log(tasks);
+
+  self.currentUserId = currentUserId;
 
   self.tasks = tasks;
+
+  self.currentDate = new Date();
 
   self.goToNewTask = function () {
     $window.location.href = '#/tasks/new/';
@@ -259,7 +266,6 @@ app.config(['$routeProvider', function($routeProvider) {
   };
 
   self.getUserName = function (id) {
-    console.log(id);
 
     // self.user = usersService.viewUser(id);
     //
@@ -308,8 +314,10 @@ app.factory('tasksService', ['$http', '$log', function($http, $log) {
       return get('/api/tasks/' + id);
     },
 
-    getTasksByUserId: function (id) {
-      return get('/api/users/' + id + "/tasks/");
+    listByUserId: function (id) {
+      return get('/api/users/' + id + '/tasks/').then(function(result) {
+        return result.tasks;
+      });
     },
 
     addTask: function(task) {
@@ -364,10 +372,10 @@ app.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider.when('/login/', routeDefinition);
 }])
-.controller('LoginCtrl', ['usersService', 'User', '$window', '$currentUserId', function (usersService, User, $window, $currentUserId) {
+.controller('LoginCtrl', ['usersService', 'User', '$window', function (usersService, User, $window) {
   var self = this;
   self.user = User();
-  self.id = currentUserId;
+  // self.id = currentUserId;
 
   self.loginUser = function() {
 
@@ -379,7 +387,7 @@ app.config(['$routeProvider', function($routeProvider) {
 
   self.redirectLogin = function() {
     // $window.location.href= "#/users/" + self.id + "/tasks/";
-    $window.location.href="#/welcome";
+    $window.location.href="#/tasks";
   };
 }]);
 
@@ -463,7 +471,9 @@ app.factory('usersService', ['$http', '$log', function($http, $log) {
     },
 
     getCurrentUserId: function() {
-      return get('/api/users/currentUserId/');
+      return get('/api/currentUserId/').then(function (result) {
+        return result.currentUserId;
+      });
     },
 
     viewUser: function (id) {

@@ -18,7 +18,9 @@ app.factory('usersService', ['$http', '$log', function($http, $log) {
     },
 
     getCurrentUserId: function() {
-      return get('/api/users/currentUserId/');
+      return get('/api/currentUserId/').then(function (result) {
+        return result.currentUserId;
+      });
     },
 
     viewUser: function (id) {
