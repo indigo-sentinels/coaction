@@ -118,3 +118,8 @@ Once you have your application ready -- or long before -- it should be deployed 
   * Try [Flask-Store](http://flask-store.soon.build/en/latest/)
   * If that doesn't work, check out https://github.com/doobeh/Flask-S3-Uploader and https://devcenter.heroku.com/articles/s3-upload-python
 * [Vega](https://trifacta.github.io/vega/). A simplified interface on top of D3 for charting. [NVD3](http://nvd3.org/) is another option.
+
+## How to Run Locally for FE
+
+1. postgres -D /usr/local/var/postgres
+2. gulp
